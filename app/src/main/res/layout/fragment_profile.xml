@@ -1,0 +1,165 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#EBEBEB"
+    tools:context=".Fragments.ProfileFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!--   Account Layout     -->
+
+        <RelativeLayout
+            android:id="@+id/profileLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/ivProfileCover"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_profile_cover"
+                android:tintMode="src_atop"
+                app:tint="#96222f3e" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAccount"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+                <TextView
+                    android:id="@+id/tvProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Account"
+                    android:textColor="#fff"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:text="\uf304"
+                    android:textSize="20sp"
+                    android:textColor="#fff"
+                    android:fontFamily="@font/font_awesome_free_solid"
+                    android:layout_gravity="end"
+                    android:gravity="center"/>
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/ivProfileCover"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/font_awesome_free_solid"
+                android:text="\uf013"
+                android:textSize="20sp"
+                android:textColor="#444"
+                android:gravity="center"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvBorder"
+                android:layout_width="155dp"
+                android:layout_height="155dp"
+                android:layout_below="@+id/toolbarAccount"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp"
+                app:cardBackgroundColor="#E3E3E3"
+                app:cardCornerRadius="250dp">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_undraw_profile" />
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/tvFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cvBorder"
+                android:layout_marginTop="20dp"
+                android:text="Full Name"
+                android:textColor="#444"
+                android:textAlignment="center"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvFullName"
+                android:text="email@company.com"
+                android:textColor="#777"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignOut"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@+id/tvEmail"
+                android:layout_marginBottom="50dp"
+                android:background="@android:color/transparent"
+                android:text="Sign Out"
+                android:textAllCaps="false"
+                android:textColor="#000"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+        <!--    Loading Layout    -->
+
+        <LinearLayout
+            android:id="@+id/loadingLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="#000"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tvWaitLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Loading..."
+                android:textColor="#000"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

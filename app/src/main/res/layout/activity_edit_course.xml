@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditCourseActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvCourseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Course"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:id="@+id/llBtnContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mtrlBtnAddModule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Module"
+            android:textColor="#000"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconTint="#000"
+            app:backgroundTint="@null"
+            android:background="@drawable/flat_button"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvModuleList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llBtnContainer"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AdminMainActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Courses"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+            <ImageButton
+                android:id="@+id/imgBtnLogout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_logout"
+                android:background="@null"
+                android:layout_gravity="end"
+                android:layout_margin="20dp"/>
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:id="@+id/llBtnContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@+id/toolbar"
+            android:orientation="vertical">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mtrlBtnAddCourse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Course"
+                android:textColor="#000"
+                app:icon="@drawable/ic_add"
+                app:iconGravity="textStart"
+                app:iconTint="#000"
+                app:backgroundTint="@null"
+                android:background="@drawable/flat_button"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCourseList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/llBtnContainer"/>
+
+
+</RelativeLayout>

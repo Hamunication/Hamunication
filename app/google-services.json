@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "25108811572",
+    "firebase_url": "https://hamunication-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hamunication",
+    "storage_bucket": "hamunication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25108811572:android:32f60f51f717bcb4fddf61",
+        "android_client_info": {
+          "package_name": "com.dx3evm.hamunication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjZWYHikfyI_9PH-ChStyp9d1JFagrCBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

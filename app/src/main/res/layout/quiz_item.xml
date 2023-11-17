@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?selectableItemBackground"
+    android:clickable="true"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="25dp">
+
+        <EditText
+            android:id="@+id/etQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Question"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:justificationMode="inter_word"
+            android:background="@android:color/transparent" />
+
+        <EditText
+            android:id="@+id/etCorrectAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correct Answer"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:justificationMode="inter_word"
+            android:background="@android:color/transparent"
+            android:layout_below="@id/etQuestion"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/etCorrectAnswer" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mtrlBtnAddChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="Add Choices"
+            android:gravity="center_vertical"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconTint="#000"
+            android:textColor="@color/material_dynamic_primary0"
+            app:cornerRadius="4dp"
+            android:layout_below="@+id/radioGroup"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
