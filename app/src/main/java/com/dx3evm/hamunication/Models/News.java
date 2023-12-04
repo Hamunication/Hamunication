@@ -2,23 +2,36 @@ package com.dx3evm.hamunication.Models;
 
 public class News {
 
-    private int newsImage;
+    private String newsId;
+    private String newsImage;
     private String newsTitle;
+    private String newsDescription;
     private String newsEditor;
     private String newsTime;
 
-    public News(int newsImage, String newsTitle, String newsEditor, String newsTime) {
+    public News(){}
+    public News(String newsId,String newsTitle, String newsDescription, String newsEditor, String newsTime) {
+        this.newsId = newsId;
         this.newsImage = newsImage;
         this.newsTitle = newsTitle;
+        this.newsDescription = newsDescription;
         this.newsEditor = newsEditor;
         this.newsTime = newsTime;
     }
 
-    public int getNewsImage() {
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(String newsId) {
+        this.newsId = newsId;
+    }
+
+    public String getNewsImage() {
         return newsImage;
     }
 
-    public void setNewsImage(int newsImage) {
+    public void setNewsImage(String newsImage) {
         this.newsImage = newsImage;
     }
 
@@ -28,6 +41,14 @@ public class News {
 
     public void setNewsTitle(String newsTitle) {
         this.newsTitle = newsTitle;
+    }
+
+    public String getNewsDescription() {
+        return newsDescription;
+    }
+
+    public void setNewsDescription(String newsDescription) {
+        this.newsDescription = newsDescription;
     }
 
     public String getNewsEditor() {

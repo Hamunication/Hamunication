@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvMenuIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_awesome_free_solid"
+        android:text="circle-user"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tvMenuTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account Details"
+        android:layout_alignStart="@+id/tvMenuIcon"
+        android:layout_marginStart="50dp"
+        android:layout_marginVertical="5dp"
+        android:textSize="18sp"/>
+
+
+    <TextView
+        android:id="@+id/tvChevronArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_awesome_free_solid"
+        android:text="chevron-right"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="14sp"/>
+
+
+</RelativeLayout>

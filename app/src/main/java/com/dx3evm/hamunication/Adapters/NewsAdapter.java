@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dx3evm.hamunication.Models.News;
 import com.dx3evm.hamunication.R;
 
@@ -32,7 +33,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        int newsImage = newsItems.get(position).getNewsImage();
+        String newsImage = newsItems.get(position).getNewsImage();
         String newsTitle = newsItems.get(position).getNewsTitle();
         String newsEditor = newsItems.get(position).getNewsEditor();
         String newsTime = newsItems.get(position).getNewsTime();
@@ -61,17 +62,16 @@ class NewsViewHolder extends RecyclerView.ViewHolder{
         tvTime = itemView.findViewById(R.id.tvTime);
     }
 
-    public void setData(int newsImage, String newsTitle, String newsEditor, String newsTime) {
-        ivNews.setImageResource(newsImage);
+    public void setData(String newsImage, String newsTitle, String newsEditor, String newsTime) {
         tvTitle.setText(newsTitle);
         tvEditor.setText(newsEditor);
         tvTime.setText(newsTime);
+        Glide.with(itemView).load(newsImage).into(ivNews);
     }
 
     public NewsViewHolder newsViewHolderAdapter(NewsAdapter newsAdapter){
         this.newsAdapter = newsAdapter;
         return this;
     }
-
 
 }

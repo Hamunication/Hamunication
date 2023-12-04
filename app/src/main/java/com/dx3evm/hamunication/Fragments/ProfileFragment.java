@@ -5,15 +5,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dx3evm.hamunication.Adapters.ProfileMenuAdapter;
 import com.dx3evm.hamunication.LoginActivity;
+import com.dx3evm.hamunication.Models.ProfileMenu;
 import com.dx3evm.hamunication.R;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,13 +44,17 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    List<ProfileMenu> profileMenuList;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth fAuth;
     RelativeLayout profileLayout;
 
     LinearLayout loadingLayout;
     TextView tvFullName, tvEmail;
-    com.google.android.material.button.MaterialButton btnSignOut;
+    ImageButton imgBtnLogout;
+
+    RecyclerView rvProfileMenu;
+    ProfileMenuAdapter profileMenuAdapter;
 
 
 
@@ -89,11 +101,24 @@ public class ProfileFragment extends Fragment {
         loadingLayout = fragmentView.findViewById(R.id.loadingLayout);
         tvFullName = fragmentView.findViewById(R.id.tvFullName);
         tvEmail = fragmentView.findViewById(R.id.tvEmail);
-        btnSignOut = fragmentView.findViewById(R.id.btnSignOut);
+        rvProfileMenu = fragmentView.findViewById(R.id.rvProfileMenu);
+        imgBtnLogout = fragmentView.findViewById(R.id.imgBtnLogout);
 
         getUserDetails();
 
-        btnSignOut.setOnClickListener(view -> {
+        rvProfileMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
+        profileMenuList = new ArrayList<>();
+        profileMenuList.add(new ProfileMenu("Your Account", "circle-user"));
+        profileMenuList.add(new ProfileMenu("Account Settings", "lock"));
+        profileMenuList.add(new ProfileMenu("Application Settings", "mobile-screen-button"));
+        profileMenuList.add(new ProfileMenu("Legal & Privacy", "book"));
+
+        profileMenuAdapter= new ProfileMenuAdapter(profileMenuList);
+
+        rvProfileMenu.setAdapter(profileMenuAdapter);
+
+
+        imgBtnLogout.setOnClickListener(view -> {
             fAuth.signOut();
             startActivity(new Intent(view.getContext().getApplicationContext(), LoginActivity.class));
             getActivity().finish();

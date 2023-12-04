@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dx3evm.hamunication.Adapters.TopicAdapter;
 import com.dx3evm.hamunication.Models.Course;
@@ -22,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EditModuleActivity extends AppCompatActivity {
 
@@ -93,32 +96,86 @@ public class EditModuleActivity extends AppCompatActivity {
         }
     }
     public void displayTopic(String courseID, String moduleID){
+        topicList.clear();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(courseID).child("Module").child(moduleID);
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                try {
+//                    for(DataSnapshot topicSnapshot : snapshot.child("Topic").getChildren()){
+//                        String topicID = topicSnapshot.getKey();
+//                        String topicTitle = topicSnapshot.child("Title").getValue(String.class);
+//                        String topicDescription = topicSnapshot.child("Description").getValue(String.class);
+//
+//
+//                        Topic topic = new Topic();
+//                        topic.setTopicID(topicID);
+//                        topic.setTopicTitle(topicTitle);
+//                        topic.setTopicDescription(topicDescription);
+//                        topic.setUrlList(media);
+//
+//                        topicList.add(topic);
+//                    }
+//                    topicAdapter.notifyDataSetChanged();
+//                }catch (Exception ex){
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
-                    for(DataSnapshot topicSnapshot : snapshot.child("Topic").getChildren()){
+                    for (DataSnapshot topicSnapshot : snapshot.child("Topic").getChildren()) {
                         String topicID = topicSnapshot.getKey();
                         String topicTitle = topicSnapshot.child("Title").getValue(String.class);
                         String topicDescription = topicSnapshot.child("Description").getValue(String.class);
+
+                        // Retrieve Media values
+                        DataSnapshot mediaSnapshot = topicSnapshot.child("Media");
+
+                        Map<String, Map<String, String>> mediaMap = new HashMap<>();
+
+
+                        for (DataSnapshot mediaChild : mediaSnapshot.getChildren()) {
+                            String mediaKey = mediaChild.getKey();
+                            String mediaLink = mediaChild.child("link").getValue(String.class);
+                            String mediaType = mediaChild.child("type").getValue(String.class);
+
+                            Map<String, String> nestedMediaMap = new HashMap<>();
+                            nestedMediaMap.put("link", mediaLink);
+                            nestedMediaMap.put("type", mediaType);
+
+                            mediaMap.put(mediaKey, nestedMediaMap);
+                        }
+
+                        // Set media values to your Topic object
+
 
                         Topic topic = new Topic();
                         topic.setTopicID(topicID);
                         topic.setTopicTitle(topicTitle);
                         topic.setTopicDescription(topicDescription);
+                        topic.setUrlList(mediaMap);
 
                         topicList.add(topic);
                     }
-                    topicAdapter.notifyDataSetChanged();
-                }catch (Exception ex){
 
+                    topicAdapter.notifyDataSetChanged();
+                } catch (Exception ex) {
+                    // Handle exceptions
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Handle errors
             }
         });
 

@@ -5,4 +5,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryLight">#1f000000</color>
     <color name="colorError">#b91c1c</color>
+    <color name="ripple_color">#E9E9E9</color>
 </resources>

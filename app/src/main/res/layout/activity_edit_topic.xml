@@ -1,77 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EditTopicActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/parentContainer"
+        android:windowSoftInputMode="adjustResize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        tools:context=".EditTopicActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvEditTopic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit Topic"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvEditTopic"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:text="Edit Topic"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:gravity="center|start"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:text="floppy-disk"
+                    android:textSize="18sp"
+                    android:background="@null"
+                    android:fontFamily="@font/font_awesome_free_solid"
+                    android:textColor="@color/material_dynamic_primary0"
+                    app:cornerRadius="4dp"
+                    app:rippleColor="@color/colorPrimaryLight" />
+            </LinearLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
-        <EditText
-            android:id="@+id/etTopicName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:background="@drawable/edit_text_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="10dp"
-            android:hint="Topic Name"/>
 
-        <EditText
-            android:id="@+id/etTopicDescription"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text|textMultiLine"
-            android:background="@drawable/edit_text_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:hint="Topic Description"
-            android:gravity="top"/>
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:layout_below="@+id/toolbar">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/mediaFrameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <EditText
+                    android:id="@+id/etTopicName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textSize="20sp"
+                    android:background="@null"
+                    android:padding="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Topic Name"/>
+
+                <EditText
+                    android:id="@+id/etTopicDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text|textMultiLine"
+                    android:textSize="18sp"
+                    android:background="@null"
+                    android:padding="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:hint="Topic Description"
+                    android:gravity="top"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Bottom Menu -->
+
         <LinearLayout
+            android:id="@+id/bottomMenuOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:background="#ffff"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCancel"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="Cancel"
+                android:id="@+id/btnAddImageVideo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_weight="1"
+                android:text="square-plus"
+                android:textSize="20sp"
+                android:background="@null"
+                android:fontFamily="@font/font_awesome_free_regular"
                 android:textColor="@color/material_dynamic_primary0"
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/colorPrimaryLight" />
+
+            <TextView
+                android:id="@+id/tvDateNow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:text="Dec 05 2023"/>
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSave"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="Save"
+                android:id="@+id/btnChangeColor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_weight="1"
+                android:text="palette"
+                android:textSize="20sp"
+                android:background="@null"
+                android:fontFamily="@font/font_awesome_free_solid"
                 android:textColor="@color/material_dynamic_primary0"
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/colorPrimaryLight" />
+
         </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Loading Dialog  -->
+
+    <LinearLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80CCCCCC"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tvProgressLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Saving..."
+            android:textColor="#000"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
-
-</ScrollView>
+</RelativeLayout>

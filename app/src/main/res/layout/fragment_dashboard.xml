@@ -33,6 +33,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="15dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -41,7 +42,6 @@
                     android:layout_weight="7"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:padding="15dp"
                     android:text="News" />
                 <TextView
                     android:layout_width="0dp"
@@ -58,34 +58,35 @@
                 android:clipToPadding="false"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"/>
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="7"-->
-<!--                    android:textSize="22sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:padding="15dp"-->
-<!--                    android:text="Courses" />-->
-<!--                <TextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="See all"/>-->
-<!--            </LinearLayout>-->
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/rvCourses"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:nestedScrollingEnabled="false"-->
-<!--                android:clipToPadding="false"-->
-<!--                android:paddingStart="15dp"-->
-<!--                android:paddingEnd="15dp"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:padding="15dp"
+                    android:text="Courses" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="See all"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCourses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"/>
         </LinearLayout>
     </ScrollView>
 
