@@ -1,17 +1,18 @@
 package com.dx3evm.hamunication.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Quiz {
-    private String quizID, quizQuestion, quizCorrectAnswer;
-    private ArrayList<String> quizChoices = new ArrayList<>();
+    private String quizID, quizTitle;
+    private Map<String, Object> questions = new HashMap<>();
     public Quiz(){}
 
-    public Quiz(String quizID, String quizQuestion, String quizCorrectAnswer, ArrayList<String> quizChoices){
+    public Quiz(String quizID, String quizTitle, Map<String, Object> questions) {
         this.quizID = quizID;
-        this.quizQuestion = quizQuestion;
-        this.quizCorrectAnswer = quizCorrectAnswer;
-        this.quizChoices = quizChoices;
+        this.quizTitle = quizTitle;
+        this.questions = questions;
     }
 
     public String getQuizID() {
@@ -22,27 +23,19 @@ public class Quiz {
         this.quizID = quizID;
     }
 
-    public String getQuizQuestion() {
-        return quizQuestion;
+    public String getQuizTitle() {
+        return quizTitle;
     }
 
-    public void setQuizQuestion(String quizQuestion) {
-        this.quizQuestion = quizQuestion;
+    public void setQuizTitle(String quizTitle) {
+        this.quizTitle = quizTitle;
     }
 
-    public String getQuizCorrectAnswer() {
-        return quizCorrectAnswer;
+    public Map<String, Object> getQuestions() {
+        return questions;
     }
 
-    public void setQuizCorrectAnswer(String quizCorrectAnswer) {
-        this.quizCorrectAnswer = quizCorrectAnswer;
-    }
-
-    public ArrayList<String> getChoices() {
-        return quizChoices;
-    }
-
-    public void setChoices(ArrayList<String> choices) {
-        this.quizChoices = choices;
+    public void setQuestions(Map<String, Object> questions) {
+        this.questions = questions;
     }
 }

@@ -14,12 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dx3evm.hamunication.Adapters.CourseAdapter;
-import com.dx3evm.hamunication.AdminMainActivity;
-import com.dx3evm.hamunication.EditCourseActivity;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.R;
 import com.dx3evm.hamunication.ViewCourseActivity;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

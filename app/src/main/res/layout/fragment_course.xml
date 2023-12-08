@@ -32,11 +32,7 @@
                 android:id="@+id/rvCourseList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:clipToPadding="false"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"/>
-
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

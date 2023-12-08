@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.dx3evm.hamunication.Adapters.ModuleAdapter;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,8 +54,8 @@ public class ViewCourseActivity extends AppCompatActivity {
         rvModuleList.setLayoutManager(new LinearLayoutManager(this));
         rvModuleList.setAdapter(moduleAdapter);
 
-        if(getIntent().hasExtra(AdminMainActivity.NEXT_SCREEN)){
-            course = (Course) getIntent().getSerializableExtra(AdminMainActivity.NEXT_SCREEN);
+        if(getIntent().hasExtra(CreateCourseActivity.NEXT_SCREEN)){
+            course = (Course) getIntent().getSerializableExtra(CreateCourseActivity.NEXT_SCREEN);
 
             if(course != null){
                 tvCourseName.setText(course.getTitle());

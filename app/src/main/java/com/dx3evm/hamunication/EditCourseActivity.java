@@ -62,8 +62,8 @@ public class EditCourseActivity extends AppCompatActivity {
         rvModuleList.setLayoutManager(new LinearLayoutManager(this));
         rvModuleList.setAdapter(moduleAdapter);
 
-        if(getIntent().hasExtra(AdminMainActivity.NEXT_SCREEN)){
-            course = (Course) getIntent().getSerializableExtra(AdminMainActivity.NEXT_SCREEN);
+        if(getIntent().hasExtra(CreateCourseActivity.NEXT_SCREEN)){
+            course = (Course) getIntent().getSerializableExtra(CreateCourseActivity.NEXT_SCREEN);
 
             if(course != null){
                 tvCourseName.setText(course.getTitle());

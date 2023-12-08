@@ -13,14 +13,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="25dp">
+        android:padding="20dp">
 
         <EditText
             android:id="@+id/etQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Question"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:padding="10dp"
             android:justificationMode="inter_word"
             android:background="@android:color/transparent" />
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Correct Answer"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:padding="10dp"
             android:layout_marginTop="10dp"
             android:justificationMode="inter_word"
@@ -38,13 +38,26 @@
             android:layout_below="@id/etQuestion"
             />
 
+        <TextView
+            android:id="@+id/tvChoicesLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choices"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/etCorrectAnswer"/>
+
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/etCorrectAnswer" />
+            android:paddingHorizontal="20dp"
+            android:layout_below="@+id/tvChoicesLabel" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mtrlBtnAddChoices"

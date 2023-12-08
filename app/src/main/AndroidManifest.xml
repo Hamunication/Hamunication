@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hamunication"
         tools:targetApi="31">
+        <activity
+            android:name=".ViewQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminMainActivity"
+            android:exported="false" />
         <activity
             android:name=".EditQuizActivity"
             android:exported="false" />
@@ -53,7 +61,7 @@
             android:name=".EditCourseActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminMainActivity"
+            android:name=".CreateCourseActivity"
             android:exported="true" />
     </application>
 

@@ -18,85 +18,86 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-public class QuizAdapter extends RecyclerView.Adapter<QuizViewHolder>{
+public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder> {
 
     List<Quiz> quizList;
 
-    public QuizAdapter( List<Quiz> quizList){
+    public QuizAdapter(List<Quiz> quizList) {
         this.quizList = quizList;
     }
 
     @NonNull
     @Override
     public QuizViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.quiz_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.quiz_item, parent, false);
 
         return new QuizViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull QuizViewHolder holder, int position) {
-
+        // Implement onBindViewHolder logic if needed
     }
 
     @Override
     public int getItemCount() {
         return quizList.size();
     }
-}
 
-class QuizViewHolder extends RecyclerView.ViewHolder{
+    public class QuizViewHolder extends RecyclerView.ViewHolder {
 
-    EditText etQuestion, etCorrectAnswer;
+        public EditText etQuestion;
+        public EditText etCorrectAnswer;
 
-    MaterialButton mtrlBtnAddChoices;
+        public MaterialButton mtrlBtnAddChoices;
 
-    RadioGroup radioGroup;
+        public RadioGroup radioGroup;
 
-    public QuizViewHolder(@NonNull View itemView) {
-        super(itemView);
-        etQuestion = itemView.findViewById(R.id.etQuestion);
-        etCorrectAnswer = itemView.findViewById(R.id.etCorrectAnswer);
-        mtrlBtnAddChoices = itemView.findViewById(R.id.mtrlBtnAddChoices);
-        radioGroup = itemView.findViewById(R.id.radioGroup);
+        public QuizViewHolder(@NonNull View itemView) {
+            super(itemView);
+            etQuestion = itemView.findViewById(R.id.etQuestion);
+            etCorrectAnswer = itemView.findViewById(R.id.etCorrectAnswer);
+            mtrlBtnAddChoices = itemView.findViewById(R.id.mtrlBtnAddChoices);
+            radioGroup = itemView.findViewById(R.id.radioGroup);
 
-        mtrlBtnAddChoices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputDialog inputDialog = new InputDialog();
+            mtrlBtnAddChoices.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Handle the click event
+                    InputDialog inputDialog = new InputDialog();
 
-                inputDialog.showDialog(itemView.getContext(), "choices", new InputDialog.OnDialogClickListener() {
-                    @Override
-                    public void onSave(String input) {
-                        if (radioGroup.getChildCount() >= 4) {
-                            mtrlBtnAddChoices.setEnabled(false);
-                        }else {
-                            RadioButton newRadioButton = new RadioButton(itemView.getContext());
-                            newRadioButton.setText(input);
+                    inputDialog.showDialog(itemView.getContext(), "choices", new InputDialog.OnDialogClickListener() {
+                        @Override
+                        public void onSave(String input) {
+                            // Handle the save event
+                            if (radioGroup.getChildCount() >= 4) {
+                                mtrlBtnAddChoices.setEnabled(false);
+                            } else {
+                                RadioButton newRadioButton = new RadioButton(itemView.getContext());
+                                newRadioButton.setText(input);
 
-                            newRadioButton.setTextSize(18);
+                                newRadioButton.setTextSize(18);
 
-                            int marginInPixels = 10;
-                            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                                    RadioGroup.LayoutParams.WRAP_CONTENT,
-                                    RadioGroup.LayoutParams.WRAP_CONTENT
-                            );
-                            params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
+                                int marginInPixels = 10;
+                                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                                        RadioGroup.LayoutParams.WRAP_CONTENT,
+                                        RadioGroup.LayoutParams.WRAP_CONTENT
+                                );
+                                params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
 
-                            newRadioButton.setLayoutParams(params);
+                                newRadioButton.setLayoutParams(params);
 
-                            radioGroup.addView(newRadioButton);
+                                radioGroup.addView(newRadioButton);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-            }
-        });
+                        @Override
+                        public void onCancel() {
+                            // Handle the cancel event
+                        }
+                    });
+                }
+            });
+        }
     }
-
-
 }

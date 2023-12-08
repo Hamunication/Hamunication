@@ -1,5 +1,6 @@
 package com.dx3evm.hamunication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,23 +16,37 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dx3evm.hamunication.Adapters.QuizAdapter;
 import com.dx3evm.hamunication.Dialogs.InputDialog;
+import com.dx3evm.hamunication.Models.Course;
+import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.Quiz;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EditQuizActivity extends AppCompatActivity {
 
-    ArrayList<String> choices = new ArrayList<>();
+    Map<String, String> choices = new HashMap<>();
     List<Quiz> quizList;
     RecyclerView rvQuizList;
     QuizAdapter quizAdapter;
 
-    MaterialButton mtrlBtnAddQuestion;
+    Course course = null;
+    Module module = null;
+    Quiz quiz = null;
+
+    MaterialButton mtrlBtnAddQuestion, mtrlBtnSaveQuiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +54,93 @@ public class EditQuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_quiz);
         rvQuizList = findViewById(R.id.rvQuizList);
         mtrlBtnAddQuestion = findViewById(R.id.mtrlBtnAddQuestion);
+        mtrlBtnSaveQuiz = findViewById(R.id.mtrlBtnSaveQuiz);
+
+        course = (Course) getIntent().getSerializableExtra("course");
+        module = (Module) getIntent().getSerializableExtra("module");
+        quiz = (Quiz) getIntent().getSerializableExtra("quiz");
 
         quizList = new ArrayList<>();
+        quizAdapter = new QuizAdapter(quizList);
+
+        rvQuizList.setLayoutManager(new LinearLayoutManager(this));
+        rvQuizList.setAdapter(quizAdapter);
 
         mtrlBtnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 quizList.add(new Quiz());
+                quizAdapter.notifyItemInserted(quizList.size() - 1);
+            }
+        });
 
-                quizAdapter = new QuizAdapter(quizList);
+        mtrlBtnSaveQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int itemCount = quizAdapter.getItemCount();
 
-                rvQuizList.setLayoutManager(new LinearLayoutManager(EditQuizActivity.this));
+                Map<String, Object> quizData = new HashMap<>();
+                quizData.put("quizTitle", "Test"); // Set your quiz title here
+                Map<String, Object> questionsMap = new HashMap<>();
 
-                rvQuizList.setAdapter(quizAdapter);
+                for (int i = 0; i < itemCount; i++) {
+                    RecyclerView.ViewHolder viewHolder = rvQuizList.findViewHolderForAdapterPosition(i);
+                    if (viewHolder instanceof QuizAdapter.QuizViewHolder) {
+                        QuizAdapter.QuizViewHolder quizViewHolder = (QuizAdapter.QuizViewHolder) viewHolder;
+
+                        Map<String, Object> questionMap = new HashMap<>();
+                        Map<String, String> choices = new HashMap<>();
+
+                        String questionTitle = quizViewHolder.etQuestion.getText().toString();
+                        String correctAnswer = quizViewHolder.etCorrectAnswer.getText().toString();
+
+                        questionMap.put("QuestionTitle", questionTitle);
+                        questionMap.put("CorrectAnswer", correctAnswer);
+
+                        // Iterate through RadioGroup's child views
+                        for (int j = 0; j < quizViewHolder.radioGroup.getChildCount(); j++) {
+                            View radioChild = quizViewHolder.radioGroup.getChildAt(j);
+
+                            if (radioChild instanceof RadioButton) {
+                                RadioButton radioButton = (RadioButton) radioChild;
+                                String choice = radioButton.getText().toString();
+                                choices.put(String.valueOf(j), choice);
+                            }
+                        }
+
+                        questionMap.put("Choices", choices);
+                        questionsMap.put("question" + i, questionMap);
+                    } else {
+                        // Handle the case where the view holder is null or not an instance of QuizViewHolder
+                    }
+                }
+
+                quizData.put("questions", questionsMap);
+                createQuiz(quizData);
             }
         });
     }
+
+    public void createQuiz(Map<String, Object> quizData){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(course.getId()).child("Module").child(module.getId()).child("Quiz");
+
+        String quizId = databaseReference.push().getKey();
+        Toast.makeText(this, "ID: " + quizId, Toast.LENGTH_SHORT).show();
+
+        // Set the quiz data in the database
+        databaseReference.child(quizId).setValue(quizData)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Toast.makeText(EditQuizActivity.this, "Passed", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditQuizActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
+
 }

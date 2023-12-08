@@ -73,7 +73,11 @@ public class EditModuleActivity extends AppCompatActivity {
         mtrlBtnAddQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditModuleActivity.this, EditQuizActivity.class));
+                Intent intent = new Intent(EditModuleActivity.this, EditQuizActivity.class);
+                intent.putExtra("course", course);
+                intent.putExtra("module", module);
+
+                startActivity(intent);
             }
         });
 
@@ -98,36 +102,6 @@ public class EditModuleActivity extends AppCompatActivity {
     public void displayTopic(String courseID, String moduleID){
         topicList.clear();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(courseID).child("Module").child(moduleID);
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                try {
-//                    for(DataSnapshot topicSnapshot : snapshot.child("Topic").getChildren()){
-//                        String topicID = topicSnapshot.getKey();
-//                        String topicTitle = topicSnapshot.child("Title").getValue(String.class);
-//                        String topicDescription = topicSnapshot.child("Description").getValue(String.class);
-//
-//
-//                        Topic topic = new Topic();
-//                        topic.setTopicID(topicID);
-//                        topic.setTopicTitle(topicTitle);
-//                        topic.setTopicDescription(topicDescription);
-//                        topic.setUrlList(media);
-//
-//                        topicList.add(topic);
-//                    }
-//                    topicAdapter.notifyDataSetChanged();
-//                }catch (Exception ex){
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

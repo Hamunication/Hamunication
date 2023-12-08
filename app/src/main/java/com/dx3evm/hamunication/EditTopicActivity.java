@@ -314,8 +314,11 @@ public class EditTopicActivity extends AppCompatActivity {
             int previousVideoId = mediaFrameLayout.getChildAt(mediaFrameLayout.getChildCount() - 1).getId();
             videoLayoutParams.addRule(RelativeLayout.BELOW, previousVideoId);
 
+
             videoLayoutParams.setMargins(0, 100, 0, 0);
         }
+
+        videoLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 
         videoView.setLayoutParams(videoLayoutParams);
         videoView.setBackground(border);
