@@ -84,7 +84,6 @@ public class EditTopicActivity extends AppCompatActivity {
         if (topic != null) {
             etTopicName.setText(topic.getTopicTitle());
 
-            Map<String, Map<String, String>> resources = topic.getUrlList();
             for (Map.Entry<String, Map<String, String>> list : topic.getUrlList().entrySet()) {
                 Map<String, String> mediaValues = list.getValue();
 

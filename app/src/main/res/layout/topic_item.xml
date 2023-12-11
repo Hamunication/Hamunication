@@ -9,6 +9,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:src="@drawable/ic_topic"
+            app:tint="#2978A0"/>
+
 
         <TextView
             android:id="@+id/tvTopicTitle"
@@ -22,16 +31,18 @@
             android:text="Topic Title"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/ivEdit"
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/ic_arrow_right"
-            android:textColor="#000"
-            app:backgroundTint="@null"
-            android:background="@null" />
+            android:fontFamily="@font/font_awesome_free_solid"
+            android:text="chevron-right"
+            android:textColor="#2978A0"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:tint="#2978A0"/>
+
     </LinearLayout>
 
     <View

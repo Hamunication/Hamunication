@@ -116,7 +116,6 @@ public class EditModuleActivity extends AppCompatActivity {
 
                         Map<String, Map<String, String>> mediaMap = new HashMap<>();
 
-
                         for (DataSnapshot mediaChild : mediaSnapshot.getChildren()) {
                             String mediaKey = mediaChild.getKey();
                             String mediaLink = mediaChild.child("link").getValue(String.class);

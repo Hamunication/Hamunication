@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/etQuizName"
+        android:id="@+id/etQuizTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Quiz Title"
@@ -65,7 +65,7 @@
         android:id="@+id/rvQuizList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/etQuizName" />
+        android:layout_below="@+id/etQuizTitle" />
 
 
 

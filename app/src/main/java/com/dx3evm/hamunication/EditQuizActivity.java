@@ -5,21 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.dx3evm.hamunication.Adapters.QuizAdapter;
-import com.dx3evm.hamunication.Dialogs.InputDialog;
+import com.dx3evm.hamunication.Adapters.QuestionItemEditAdapter;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.Quiz;
@@ -30,22 +21,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class EditQuizActivity extends AppCompatActivity {
 
-    Map<String, String> choices = new HashMap<>();
+
     List<Quiz> quizList;
     RecyclerView rvQuizList;
-    QuizAdapter quizAdapter;
+    QuestionItemEditAdapter quizItemAdapter;
 
     Course course = null;
     Module module = null;
     Quiz quiz = null;
-
     MaterialButton mtrlBtnAddQuestion, mtrlBtnSaveQuiz;
 
     @Override
@@ -61,23 +50,23 @@ public class EditQuizActivity extends AppCompatActivity {
         quiz = (Quiz) getIntent().getSerializableExtra("quiz");
 
         quizList = new ArrayList<>();
-        quizAdapter = new QuizAdapter(quizList);
+        quizItemAdapter = new QuestionItemEditAdapter(quizList);
 
         rvQuizList.setLayoutManager(new LinearLayoutManager(this));
-        rvQuizList.setAdapter(quizAdapter);
+        rvQuizList.setAdapter(quizItemAdapter);
 
         mtrlBtnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 quizList.add(new Quiz());
-                quizAdapter.notifyItemInserted(quizList.size() - 1);
+                quizItemAdapter.notifyItemInserted(quizList.size() - 1);
             }
         });
 
         mtrlBtnSaveQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int itemCount = quizAdapter.getItemCount();
+                int itemCount = quizItemAdapter.getItemCount();
 
                 Map<String, Object> quizData = new HashMap<>();
                 quizData.put("quizTitle", "Test"); // Set your quiz title here
@@ -85,8 +74,8 @@ public class EditQuizActivity extends AppCompatActivity {
 
                 for (int i = 0; i < itemCount; i++) {
                     RecyclerView.ViewHolder viewHolder = rvQuizList.findViewHolderForAdapterPosition(i);
-                    if (viewHolder instanceof QuizAdapter.QuizViewHolder) {
-                        QuizAdapter.QuizViewHolder quizViewHolder = (QuizAdapter.QuizViewHolder) viewHolder;
+                    if (viewHolder instanceof QuestionItemEditAdapter.QuestionItemEditViewHolder) {
+                        QuestionItemEditAdapter.QuestionItemEditViewHolder quizViewHolder = (QuestionItemEditAdapter.QuestionItemEditViewHolder) viewHolder;
 
                         Map<String, Object> questionMap = new HashMap<>();
                         Map<String, String> choices = new HashMap<>();

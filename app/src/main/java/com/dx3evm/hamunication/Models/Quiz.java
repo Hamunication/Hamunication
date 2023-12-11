@@ -1,10 +1,11 @@
 package com.dx3evm.hamunication.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Quiz {
+public class Quiz implements Serializable {
     private String quizID, quizTitle;
     private Map<String, Object> questions = new HashMap<>();
     public Quiz(){}
@@ -39,3 +40,4 @@ public class Quiz {
         this.questions = questions;
     }
 }
+

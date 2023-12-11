@@ -1,80 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?selectableItemBackground"
-    android:clickable="true"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="5dp"
-    android:focusable="true">
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/etQuestion"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Question"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:justificationMode="inter_word"
-            android:background="@android:color/transparent" />
-
-        <EditText
-            android:id="@+id/etCorrectAnswer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Correct Answer"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:justificationMode="inter_word"
-            android:background="@android:color/transparent"
-            android:layout_below="@id/etQuestion"
-            />
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:src="@drawable/ic_quiz"
+            app:tint="#2978A0"/>
 
         <TextView
-            android:id="@+id/tvChoicesLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Choices"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/etCorrectAnswer"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:paddingHorizontal="20dp"
-            android:layout_below="@+id/tvChoicesLabel" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mtrlBtnAddChoices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:text="Add Choices"
+            android:id="@+id/tvQuizTitle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:textAllCaps="false"
-            android:textSize="18dp"
-            android:layout_marginTop="10dp"
-            app:icon="@drawable/ic_add"
-            app:iconGravity="textStart"
-            app:iconTint="#000"
-            android:textColor="@color/material_dynamic_primary0"
-            app:cornerRadius="4dp"
-            android:layout_below="@+id/radioGroup"/>
-    </RelativeLayout>
+            android:lines="1"
+            android:paddingStart="20dp"
+            android:text="Quiz Title"
+            android:textSize="20sp" />
 
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:fontFamily="@font/font_awesome_free_solid"
+            android:text="chevron-right"
+            android:textColor="#2978A0"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:tint="#2978A0"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"/>
+
+</LinearLayout>

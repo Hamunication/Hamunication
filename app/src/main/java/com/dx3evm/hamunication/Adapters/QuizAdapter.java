@@ -4,25 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dx3evm.hamunication.Dialogs.InputDialog;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.R;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder> {
 
+    Context context;
     List<Quiz> quizList;
 
-    public QuizAdapter(List<Quiz> quizList) {
+    private OnClickListener onClickListener;
+
+    public QuizAdapter(Context context, List<Quiz> quizList) {
+        this.context = context;
         this.quizList = quizList;
     }
 
@@ -36,7 +36,17 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull QuizViewHolder holder, int position) {
-        // Implement onBindViewHolder logic if needed
+        Quiz quiz = quizList.get(position);
+        holder.tvQuizTitle.setText(quiz.getQuizTitle());
+        holder.tvQuizTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onClickListener != null){
+                    onClickListener.onClick(holder.getAdapterPosition(), quiz);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -44,60 +54,25 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
         return quizList.size();
     }
 
-    public class QuizViewHolder extends RecyclerView.ViewHolder {
+    public void setOnClickListener(QuizAdapter.OnClickListener onClickListener){
+        this.onClickListener = onClickListener;
+    }
 
-        public EditText etQuestion;
-        public EditText etCorrectAnswer;
+    public interface OnClickListener {
+        void onClick(int position, Quiz quiz);
 
-        public MaterialButton mtrlBtnAddChoices;
+    }
 
-        public RadioGroup radioGroup;
+    public class QuizViewHolder extends RecyclerView.ViewHolder{
+
+        TextView tvQuizTitle;
 
         public QuizViewHolder(@NonNull View itemView) {
             super(itemView);
-            etQuestion = itemView.findViewById(R.id.etQuestion);
-            etCorrectAnswer = itemView.findViewById(R.id.etCorrectAnswer);
-            mtrlBtnAddChoices = itemView.findViewById(R.id.mtrlBtnAddChoices);
-            radioGroup = itemView.findViewById(R.id.radioGroup);
-
-            mtrlBtnAddChoices.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Handle the click event
-                    InputDialog inputDialog = new InputDialog();
-
-                    inputDialog.showDialog(itemView.getContext(), "choices", new InputDialog.OnDialogClickListener() {
-                        @Override
-                        public void onSave(String input) {
-                            // Handle the save event
-                            if (radioGroup.getChildCount() >= 4) {
-                                mtrlBtnAddChoices.setEnabled(false);
-                            } else {
-                                RadioButton newRadioButton = new RadioButton(itemView.getContext());
-                                newRadioButton.setText(input);
-
-                                newRadioButton.setTextSize(18);
-
-                                int marginInPixels = 10;
-                                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                                        RadioGroup.LayoutParams.WRAP_CONTENT,
-                                        RadioGroup.LayoutParams.WRAP_CONTENT
-                                );
-                                params.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels);
-
-                                newRadioButton.setLayoutParams(params);
-
-                                radioGroup.addView(newRadioButton);
-                            }
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            // Handle the cancel event
-                        }
-                    });
-                }
-            });
+            tvQuizTitle = itemView.findViewById(R.id.tvQuizTitle);
         }
     }
+
+
 }
+
