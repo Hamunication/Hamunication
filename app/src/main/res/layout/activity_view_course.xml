@@ -1,28 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewCourseActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/tvCourseName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Course"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
-    </androidx.appcompat.widget.Toolbar>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="Course"
+            app:expandedTitleGravity="top"
+            app:expandedTitleTextColor="#fff">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/ivCourseImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/img_news_cyclone"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Black overlay -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#80000000"/> <!-- Adjust the alpha value as needed -->
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvCourseDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Magna fringilla urna porttitor rhoncus dolor purus non enim. Nisi est sit amet facilisis magna etiam tempor orci. Purus gravida quis blandit turpis. Suspendisse potenti nullam ac tortor vitae. Pellentesque elit eget gravida cum sociis natoque penatibus et. Sed elementum tempus egestas sed sed. Duis at consectetur lorem donec massa. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Sed augue lacus viverra vitae. Suspendisse in est ante in nibh mauris cursus. Suspendisse potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Mauris nunc congue nisi vitae suscipit tellus mauris a."
+                android:textColor="#fff"
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:padding="20dp"
+                android:textSize="16sp"
+                android:justificationMode="inter_word"
+                android:layout_gravity="bottom"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.6"/>
+
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"/>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvModuleList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"/>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

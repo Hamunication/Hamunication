@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dx3evm.hamunication.Adapters.ModuleAdapter;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +27,9 @@ import java.util.List;
 public class ViewCourseActivity extends AppCompatActivity {
 
     ModuleAdapter moduleAdapter;
-    TextView tvCourseName;
+    CollapsingToolbarLayout tvCourseName;
+    TextView tvCourseDescription;
+    ImageView ivCourseImg;
     List<Module> moduleList;
     RecyclerView rvModuleList;
 
@@ -36,6 +41,8 @@ public class ViewCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_course);
 
         tvCourseName = findViewById(R.id.tvCourseName);
+        tvCourseDescription = findViewById(R.id.tvCourseDescription);
+        ivCourseImg = findViewById(R.id.ivCourseImg);
         rvModuleList = findViewById(R.id.rvModuleList);
 
         moduleList = new ArrayList<>();
@@ -58,13 +65,10 @@ public class ViewCourseActivity extends AppCompatActivity {
             course = (Course) getIntent().getSerializableExtra(CreateCourseActivity.NEXT_SCREEN);
 
             if(course != null){
-                tvCourseName.setText(course.getTitle());
+                tvCourseName.setTitle(course.getTitle());
+                tvCourseDescription.setText(course.getDescription());
+                Glide.with(ViewCourseActivity.this).load(course.getImg()).into(ivCourseImg);
                 displayModules(course.getId());
-//                if(moduleList.isEmpty()){
-//                    Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show();
-//                }else{
-//
-//                }
             }
         }
     }

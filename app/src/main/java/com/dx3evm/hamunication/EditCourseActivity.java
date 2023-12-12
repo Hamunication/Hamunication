@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -81,10 +82,15 @@ public class EditCourseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 InputDialog inputDialog = new InputDialog();
 
-                inputDialog.showDialog(EditCourseActivity.this, "module", new InputDialog.OnDialogClickListener() {
+                inputDialog.showDialog(EditCourseActivity.this, EditCourseActivity.this, "module", new InputDialog.OnDialogClickListener() {
                     @Override
                     public void onSave(String input) {
                         createModule(course.getId(), input);
+                    }
+
+                    @Override
+                    public void OnSaveCourse(String courseName, String courseDescription, Uri imageUri) {
+
                     }
 
                     @Override

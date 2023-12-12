@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dx3evm.hamunication.Adapters.CourseAdapter;
+import com.dx3evm.hamunication.CreateCourseActivity;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.R;
 import com.dx3evm.hamunication.ViewCourseActivity;
@@ -101,7 +102,6 @@ public class CourseFragment extends Fragment {
 
         return fragmentView;
     }
-
     public void displayCourses(){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -112,17 +112,21 @@ public class CourseFragment extends Fragment {
                     for(DataSnapshot courseSnapshot : snapshot.getChildren()){
                         String courseId = courseSnapshot.getKey();
                         String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+                        String courseDesc = courseSnapshot.child("Description").getValue(String.class);
+                        String courseImg = courseSnapshot.child("Image").getValue(String.class);
 
                         Course course = new Course();
                         course.setId(courseId);
                         course.setTitle(courseTitle);
+                        course.setDescription(courseDesc);
+                        course.setImg(courseImg);
 
                         courseList.add(course);
                     }
                     courseAdapter.notifyDataSetChanged();
 
                 } catch (Exception ex) {
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getContext())
                             .setTitle("")
                             .setMessage(ex.getMessage())
                             .setPositiveButton("Ok", null).show();
@@ -135,4 +139,40 @@ public class CourseFragment extends Fragment {
             }
         });
     }
+
+
+//    Old Code
+//    public void displayCourses(){
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                courseList.clear();
+//                try {
+//                    for(DataSnapshot courseSnapshot : snapshot.getChildren()){
+//                        String courseId = courseSnapshot.getKey();
+//                        String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+//
+//                        Course course = new Course();
+//                        course.setId(courseId);
+//                        course.setTitle(courseTitle);
+//
+//                        courseList.add(course);
+//                    }
+//                    courseAdapter.notifyDataSetChanged();
+//
+//                } catch (Exception ex) {
+//                    new AlertDialog.Builder(getActivity())
+//                            .setTitle("")
+//                            .setMessage(ex.getMessage())
+//                            .setPositiveButton("Ok", null).show();
+//                }
+//
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 }

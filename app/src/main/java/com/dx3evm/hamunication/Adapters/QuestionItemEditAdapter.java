@@ -1,5 +1,7 @@
 package com.dx3evm.hamunication.Adapters;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,10 @@ public class QuestionItemEditAdapter extends RecyclerView.Adapter<QuestionItemEd
 
     List<Quiz> quizList;
 
-    public QuestionItemEditAdapter(List<Quiz> quizList) {
+    private Activity activity;
+
+    public QuestionItemEditAdapter(Activity activity, List<Quiz> quizList) {
+        this.activity = activity;
         this.quizList = quizList;
     }
 
@@ -65,7 +70,7 @@ public class QuestionItemEditAdapter extends RecyclerView.Adapter<QuestionItemEd
                     // Handle the click event
                     InputDialog inputDialog = new InputDialog();
 
-                    inputDialog.showDialog(itemView.getContext(), "choices", new InputDialog.OnDialogClickListener() {
+                    inputDialog.showDialog(activity, itemView.getContext(), "choices", new InputDialog.OnDialogClickListener() {
                         @Override
                         public void onSave(String input) {
                             // Handle the save event
@@ -88,6 +93,11 @@ public class QuestionItemEditAdapter extends RecyclerView.Adapter<QuestionItemEd
 
                                 radioGroup.addView(newRadioButton);
                             }
+                        }
+
+                        @Override
+                        public void OnSaveCourse(String courseName, String courseDescription, Uri imageUri) {
+
                         }
 
                         @Override

@@ -1,12 +1,14 @@
 package com.dx3evm.hamunication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,11 +26,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreateCourseActivity extends AppCompatActivity {
 
+    InputDialog inputDialog;
     CourseAdapter courseAdapter;
     List<Course> courseList;
     MaterialButton mtrlBtnAddCourse;
@@ -67,12 +76,17 @@ public class CreateCourseActivity extends AppCompatActivity {
         mtrlBtnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputDialog inputDialog = new InputDialog();
+                inputDialog = new InputDialog();
 
-                inputDialog.showDialog(CreateCourseActivity.this, "course", new InputDialog.OnDialogClickListener() {
+                inputDialog.showDialog(CreateCourseActivity.this, CreateCourseActivity.this, "course", new InputDialog.OnDialogClickListener() {
                     @Override
                     public void onSave(String input) {
-                        createCourse(input);
+
+                    }
+
+                    @Override
+                    public void OnSaveCourse(String courseName, String courseDescription, Uri imageUri) {
+                        createCourse(courseName, courseDescription, String.valueOf(imageUri));
                     }
 
                     @Override
@@ -93,6 +107,15 @@ public class CreateCourseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            inputDialog.setImage(selectedImage);
+        }
+    }
+
     public void displayCourses(){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -103,10 +126,14 @@ public class CreateCourseActivity extends AppCompatActivity {
                     for(DataSnapshot courseSnapshot : snapshot.getChildren()){
                         String courseId = courseSnapshot.getKey();
                         String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+                        String courseDesc = courseSnapshot.child("Description").getValue(String.class);
+                        String courseImg = courseSnapshot.child("Image").getValue(String.class);
 
                         Course course = new Course();
                         course.setId(courseId);
                         course.setTitle(courseTitle);
+                        course.setDescription(courseDesc);
+                        course.setImg(courseImg);
 
                         courseList.add(course);
                     }
@@ -127,22 +154,42 @@ public class CreateCourseActivity extends AppCompatActivity {
         });
     }
 
-    public void createCourse(String courseName){
+    public void createCourse(String courseName, String courseDescription, String imageURI){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        StorageReference imageReference = storage.getReference().child("course_images/" + System.currentTimeMillis() + ".png");
+
+        UploadTask uploadTask = imageReference.putFile(Uri.parse(imageURI));
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
 
-        Course course = new Course();
-            course.setTitle(courseName);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String downloadUrl = uri.toString();
 
-        DatabaseReference newCourseRef = databaseReference.push();
-        newCourseRef.child("Title").setValue(courseName).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(CreateCourseActivity.this, "Course added Successfully!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CreateCourseActivity.this, "Error adding course!", Toast.LENGTH_SHORT).show();
+                        Map<String, Object> courseList = new HashMap<>();
+
+                        courseList.put("Title", courseName);
+                        courseList.put("Description", courseDescription);
+                        courseList.put("Image", downloadUrl);
+
+                        databaseReference.push().setValue(courseList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(CreateCourseActivity.this, "Course added Successfully!", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(CreateCourseActivity.this, "Error adding course!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         });
     }

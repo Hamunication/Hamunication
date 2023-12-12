@@ -4,9 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.R;
 import java.util.List;
@@ -25,7 +28,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item_new, parent, false);
         return new CourseViewHolder(view);
     }
 
@@ -33,6 +36,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         Course course = courseList.get(position);
         holder.tvCourseTitle.setText(course.getTitle());
+        holder.tvCourseDescription.setText(course.getDescription());
+        Glide.with(context).load(course.getImg()).into(holder.ivCourseImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,11 +67,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 class CourseViewHolder extends RecyclerView.ViewHolder {
 
     TextView tvCourseTitle;
+    TextView tvCourseDescription;
+    ImageView ivCourseImg;
 
     public CourseViewHolder(@NonNull View itemView) {
         super(itemView);
 
         tvCourseTitle = itemView.findViewById(R.id.tvCourseTitle);
+        tvCourseDescription = itemView.findViewById(R.id.tvCourseDescription);
+        ivCourseImg = itemView.findViewById(R.id.ivCourseImg);
 
     }
 }

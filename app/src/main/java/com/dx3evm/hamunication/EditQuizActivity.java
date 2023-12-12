@@ -50,7 +50,7 @@ public class EditQuizActivity extends AppCompatActivity {
         quiz = (Quiz) getIntent().getSerializableExtra("quiz");
 
         quizList = new ArrayList<>();
-        quizItemAdapter = new QuestionItemEditAdapter(quizList);
+        quizItemAdapter = new QuestionItemEditAdapter(this, quizList);
 
         rvQuizList.setLayoutManager(new LinearLayoutManager(this));
         rvQuizList.setAdapter(quizItemAdapter);
