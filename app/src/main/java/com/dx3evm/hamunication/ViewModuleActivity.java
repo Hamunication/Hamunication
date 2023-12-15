@@ -16,8 +16,10 @@ import com.dx3evm.hamunication.Adapters.TopicAdapter;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.Quiz;
+import com.dx3evm.hamunication.Models.Score;
 import com.dx3evm.hamunication.Models.Topic;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ public class ViewModuleActivity extends AppCompatActivity {
     List<Topic> topicList;
 
     List<Quiz> quizList;
+    List<Score> scoreList;
 
     RecyclerView rvTopicList, rvQuizList;
 
@@ -84,7 +87,8 @@ public class ViewModuleActivity extends AppCompatActivity {
 
 
         quizList = new ArrayList<>();
-        quizAdapter = new QuizAdapter(this, quizList);
+        scoreList = new ArrayList<>();
+        quizAdapter = new QuizAdapter(this, quizList, scoreList);
         quizAdapter.setOnClickListener(new QuizAdapter.OnClickListener() {
             @Override
             public void onClick(int position, Quiz quiz) {
@@ -164,6 +168,7 @@ public class ViewModuleActivity extends AppCompatActivity {
 
     public void displayQuiz(String courseID, String moduleID){
         quizList.clear();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(courseID).child("Module").child(moduleID);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -172,15 +177,15 @@ public class ViewModuleActivity extends AppCompatActivity {
                 for(DataSnapshot quizSnapshot : snapshot.child("Quiz").getChildren()){
                     String quizID = quizSnapshot.getKey();
                     String quizTitle = quizSnapshot.child("quizTitle").getValue(String.class);
-                    Map<String, Object> questions = (Map<String, Object>) quizSnapshot.child("questions").getValue();
 
                     Quiz quiz = new Quiz();
 
                     quiz.setQuizID(quizID);
                     quiz.setQuizTitle(quizTitle);
-                    quiz.setQuestions(questions);
 
                     quizList.add(quiz);
+
+                    calculateScores(quizID);
                 }
                 quizAdapter.notifyDataSetChanged();
             }
@@ -191,5 +196,39 @@ public class ViewModuleActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void calculateScores(String quizID){
+        scoreList.clear();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(course.getId()).child("Module").child(module.getId()).child("Quiz").child(quizID);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot scoresSnapshot : snapshot.child("usersScore").getChildren()){
+                    String id = scoresSnapshot.getKey();
+                    String score = scoresSnapshot.child("Score").getValue(String.class);
+                    String totalScore = scoresSnapshot.child("TotalScore").getValue(String.class);
+
+                    if(id.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        Score scoreModel = new Score();
+                        scoreModel.setScoreId(id);
+                        scoreModel.setScore(score);
+                        scoreModel.setTotalScore(totalScore);
+
+                        scoreList.add(scoreModel);
+
+                        quizAdapter.notifyDataSetChanged();
+
+                        Toast.makeText(ViewModuleActivity.this, "Score: " + score, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

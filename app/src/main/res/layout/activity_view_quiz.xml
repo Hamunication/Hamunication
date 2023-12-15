@@ -9,14 +9,29 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="60dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp">
+        <TextView
+            android:id="@+id/tvBack"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text="chevron-left"
+            android:fontFamily="@font/font_awesome_free_solid"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"/>
         <TextView
             android:id="@+id/tvQuizName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quiz Title"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mtrlBtnSubmit"

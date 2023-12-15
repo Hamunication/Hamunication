@@ -10,10 +10,6 @@
         android:title="Courses"
         android:icon="@drawable/ic_courses"/>
     <item
-        android:id="@+id/menu_messages"
-        android:title="Messages"
-        android:icon="@drawable/ic_messages"/>
-    <item
         android:id="@+id/menu_account"
         android:title="Account"
         android:icon="@drawable/ic_account"/>

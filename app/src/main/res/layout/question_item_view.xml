@@ -46,6 +46,18 @@
             android:layout_below="@+id/tvChoicesLabel">
         </RadioGroup>
 
+        <TextView
+            android:id="@+id/tvError"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please select an answer"
+            android:textColor="@color/colorError"
+            app:drawableStartCompat="@drawable/ic_error"
+            app:drawableTint="@color/colorError"
+            android:gravity="center|start"
+            android:layout_below="@+id/radioGroup"/>
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

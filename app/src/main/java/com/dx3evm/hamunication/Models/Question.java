@@ -9,6 +9,8 @@ public class Question implements Serializable {
     private String questionText;
     private String correctAnswer;
     private Map<String, String> choices;
+    private boolean answered;
+
 
     public Question() {
     }
@@ -50,5 +52,13 @@ public class Question implements Serializable {
 
     public void setChoices(Map<String, String> choices) {
         this.choices = choices;
+    }
+
+    public boolean isAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(boolean answered) {
+        this.answered = answered;
     }
 }

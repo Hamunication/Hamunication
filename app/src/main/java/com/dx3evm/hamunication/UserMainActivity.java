@@ -35,10 +35,7 @@ public class UserMainActivity extends AppCompatActivity {
                 selectedFragment = new DashboardFragment();
             }else if (item.getItemId() == R.id.menu_courses){
                 selectedFragment = new CourseFragment();
-            }else if(item.getItemId() == R.id.menu_messages){
-                selectedFragment = new MessageFragment();
-            }
-            else if(item.getItemId() == R.id.menu_account){
+            }else if(item.getItemId() == R.id.menu_account){
                 selectedFragment = new ProfileFragment();
             }
 

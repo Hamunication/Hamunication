@@ -9,6 +9,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:src="@drawable/ic_module"
+            app:tint="#2978A0"/>
+
         <TextView
             android:id="@+id/tvModuleTitle"
             android:layout_width="0dp"

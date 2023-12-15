@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dx3evm.hamunication.Models.Question;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,19 +27,14 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
 
     Context context;
     List<Question> questionList;
-    private String selectedQuizID;  // Add this field
+    private QuestionItemViewViewHolder questionItemViewViewHolder;
 
+    private Map<String, String> selectedChoicesMap = new HashMap<>();
 
     public QuestionItemViewAdapter(Context context, List<Question> questionList) {
         this.context = context;
         this.questionList = questionList;
     }
-
-    public void setSelectedQuizID(String selectedQuizID) {
-        this.selectedQuizID = selectedQuizID;
-        notifyDataSetChanged();
-    }
-
 
     @NonNull
     @Override
@@ -69,8 +66,15 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
 
         }
 
-
-
+        holder.radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = (RadioButton) group.getChildAt(checkedId);
+            if (radioButton != null) {
+                String questionID = currentQuestion.getQuestionID();
+                selectedChoicesMap.put(questionID, radioButton.getText().toString());
+                currentQuestion.setAnswered(true);
+                holder.tvError.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -78,8 +82,20 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
         return questionList.size();
     }
 
+    public void checkBlankChoices(){
+        for(Question question : questionList){
+            if(!question.isAnswered()){
+                questionItemViewViewHolder.tvError.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    public Map<String, String> getSelectedChoicesMap() {
+        return selectedChoicesMap;
+    }
+
     public class QuestionItemViewViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvQuestion;
+        public TextView tvQuestion, tvError;
 
         public RadioGroup radioGroup;
 
@@ -87,6 +103,7 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
         public QuestionItemViewViewHolder(@NonNull View itemView) {
             super(itemView);
             tvQuestion = itemView.findViewById(R.id.tvQuestion);
+            tvError = itemView.findViewById(R.id.tvError);
             radioGroup = itemView.findViewById(R.id.radioGroup);
         }
     }

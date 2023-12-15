@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetRight="15dp"
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:text="Module"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:gravity="center|start"/>
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>

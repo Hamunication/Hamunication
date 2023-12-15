@@ -26,16 +26,6 @@
         android:hint="Course Name"
         android:textSize="18sp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:hint="Course Description"
-            android:textSize="16sp"
-            android:gravity="top"
-            android:lines="4" />
-
     <TextView
         android:id="@+id/tvError"
         android:visibility="gone"
@@ -45,6 +35,16 @@
         android:textColor="@color/colorError"
         app:drawableStartCompat="@drawable/ic_error"
         app:drawableTint="@color/colorError" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:hint="Course Description"
+            android:textSize="16sp"
+            android:gravity="top"
+            android:lines="4" />
 
     <LinearLayout
         android:layout_width="match_parent"
