@@ -17,6 +17,7 @@ import com.dx3evm.hamunication.Adapters.QuestionItemViewAdapter;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.Question;
+import com.dx3evm.hamunication.Models.QuestionModel;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.Models.Topic;
 import com.google.android.material.button.MaterialButton;
@@ -34,8 +35,12 @@ import java.util.Map;
 
 public class ViewQuizActivity extends AppCompatActivity {
     int score = 0;
+    FirebaseAuth fAuth;
+    FirebaseDatabase firebaseDatabase;
+
+    String currentUserFullName;
     Map<String, String> correctAnswersMap = new HashMap<>();
-    List<Question> questionList;
+    List<QuestionModel> questionList;
     QuestionItemViewAdapter questionItemViewAdapter;
     MaterialButton mtrlBtnSubmit;
     TextView tvQuizName, tvBack;
@@ -49,6 +54,9 @@ public class ViewQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_quiz);
+
+        fAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         course = (Course) getIntent().getSerializableExtra("course");
         module = (Module) getIntent().getSerializableExtra("module");
@@ -66,7 +74,7 @@ public class ViewQuizActivity extends AppCompatActivity {
 
         questionItemViewAdapter.notifyDataSetChanged();
 
-
+        getUserDetails();
         getQuizScore(quiz.getQuizID());
 
         if(quiz != null){
@@ -98,12 +106,12 @@ public class ViewQuizActivity extends AppCompatActivity {
 
                 for (DataSnapshot questionSnapshot : snapshot.child("questions").getChildren()) {
                     String questionID = questionSnapshot.getKey();
-                    String questionTitle = questionSnapshot.child("QuestionTitle").getValue(String.class);
-                    String correctAnswer = questionSnapshot.child("CorrectAnswer").getValue(String.class);
+                    String questionTitle = questionSnapshot.child("questionTitle").getValue(String.class);
+                    String correctAnswer = questionSnapshot.child("correctAnswer").getValue(String.class);
 
                     Map<String, String> choices = new HashMap<>();
 
-                    for (DataSnapshot choiceSnapshot : questionSnapshot.child("Choices").getChildren()) {
+                    for (DataSnapshot choiceSnapshot : questionSnapshot.child("choices").getChildren()) {
                         String choiceKey = choiceSnapshot.getKey();
                         String choiceValue = choiceSnapshot.getValue(String.class);
                         choices.put(choiceKey, choiceValue);
@@ -111,9 +119,9 @@ public class ViewQuizActivity extends AppCompatActivity {
 
                     correctAnswersMap.put(questionID, correctAnswer);
 
-                    Question question = new Question();
+                    QuestionModel question = new QuestionModel();
                     question.setQuestionID(questionID);
-                    question.setQuestionText(questionTitle);
+                    question.setQuestionTitle(questionTitle);
                     question.setCorrectAnswer(correctAnswer);
                     question.setChoices(choices);
 
@@ -138,9 +146,7 @@ public class ViewQuizActivity extends AppCompatActivity {
                     String id = scoresSnapshot.getKey();
                     String score = scoresSnapshot.child("Score").getValue(String.class);
                     String totalScore = scoresSnapshot.child("TotalScore").getValue(String.class);
-                    if(id.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        Toast.makeText(ViewQuizActivity.this, "Score: " + score + "/" + totalScore, Toast.LENGTH_SHORT).show();
-                    }
+                   
                 }
             }
 
@@ -173,11 +179,32 @@ public class ViewQuizActivity extends AppCompatActivity {
             resultIntent.putExtra("Score", score);
             resultIntent.putExtra("TotalScore", correctAnswersMap.size());
             resultIntent.putExtra("QuizTitle", tvQuizName.getText().toString());
+            resultIntent.putExtra("UserFullName", currentUserFullName);
             resultIntent.putExtra("course", course);
             resultIntent.putExtra("module", module);
             resultIntent.putExtra("quiz", quiz);
             startActivity(resultIntent);
+            finish();
         }
     }
 
+    public void getUserDetails() {
+        if(fAuth.getCurrentUser() != null){
+            DatabaseReference databaseReference = firebaseDatabase.getReference("Users").child(fAuth.getCurrentUser().getUid());
+
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        currentUserFullName = snapshot.child("FullName").getValue(String.class);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
 }

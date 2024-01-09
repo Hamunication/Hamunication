@@ -19,6 +19,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder>{
 
     List<News> newsItems;
 
+    private OnClickListener onClickListener;
+
     public NewsAdapter(List<News> newsItems){
         this.newsItems = newsItems;
     }
@@ -33,17 +35,36 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
+        News news = newsItems.get(position);
         String newsImage = newsItems.get(position).getNewsImage();
         String newsTitle = newsItems.get(position).getNewsTitle();
         String newsEditor = newsItems.get(position).getNewsEditor();
         String newsTime = newsItems.get(position).getNewsTime();
 
         holder.setData(newsImage, newsTitle, newsEditor, newsTime);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onClickListener != null){
+                    onClickListener.onClick(holder.getAdapterPosition(), news);
+                }
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return newsItems.size();
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener){
+        this.onClickListener = onClickListener;
+    }
+
+    public interface OnClickListener{
+        void onClick(int position, News news);
     }
 }
 

@@ -5,49 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".Fragments.DashboardFragment">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarAccount"
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
-        <TextView
-            android:id="@+id/tvProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Dashboard"
-            android:textColor="#444"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
 
-    </androidx.appcompat.widget.Toolbar>
-
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/dashboard_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarAccount">
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/dashboardBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Hello User!"
+                    android:textColor="#444"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="15dp"
+                    android:gravity="start"/>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:textSize="22sp"
+                    android:padding="15dp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:text="News" />
                 <TextView
+                    android:id="@+id/tvNewsSeeAll"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:gravity="center"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="See all"/>
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
@@ -68,26 +78,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:textSize="22sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:padding="15dp"
-                    android:text="Courses" />
+                    android:text="Ongoing Courses" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:gravity="center"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="See all"/>
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCourses"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
+                android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

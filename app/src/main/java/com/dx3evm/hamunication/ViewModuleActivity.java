@@ -1,13 +1,17 @@
 package com.dx3evm.hamunication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,14 +41,20 @@ public class ViewModuleActivity extends AppCompatActivity {
 
     QuizAdapter quizAdapter;
 
-    TextView tvModuleName, tvBack;
+    TextView tvModuleName, tvBack, tvPercent;
 
     List<Topic> topicList;
 
     List<Quiz> quizList;
     List<Score> scoreList;
 
+    List<Float> individualPercentageList;
+
+    RelativeLayout rlModuleProgress;
+
     RecyclerView rvTopicList, rvQuizList;
+
+    ProgressBar quizProgress;
 
     Course course = null;
     Module module = null;
@@ -53,11 +63,17 @@ public class ViewModuleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_module);
+
+        individualPercentageList = new ArrayList<>();
         tvModuleName = findViewById(R.id.tvModuleName);
         tvBack = findViewById(R.id.tvBack);
+        tvPercent = findViewById(R.id.tvPercent);
+
+        quizProgress = findViewById(R.id.quizProgress);
 
         rvTopicList = findViewById(R.id.rvTopicList);
         rvQuizList = findViewById(R.id.rvQuizList);
+        rlModuleProgress = findViewById(R.id.rlModuleProgress);
 
         topicList = new ArrayList<>();
         topicAdapter = new TopicAdapter(this, topicList);
@@ -89,6 +105,8 @@ public class ViewModuleActivity extends AppCompatActivity {
         quizList = new ArrayList<>();
         scoreList = new ArrayList<>();
         quizAdapter = new QuizAdapter(this, quizList, scoreList);
+
+
         quizAdapter.setOnClickListener(new QuizAdapter.OnClickListener() {
             @Override
             public void onClick(int position, Quiz quiz) {
@@ -101,8 +119,10 @@ public class ViewModuleActivity extends AppCompatActivity {
             }
         });
 
+
         rvQuizList.setLayoutManager(new LinearLayoutManager(this));
         rvQuizList.setAdapter(quizAdapter);
+
 
 
         if(getIntent().hasExtra("module")){
@@ -111,7 +131,7 @@ public class ViewModuleActivity extends AppCompatActivity {
 
             if(module != null){
                 tvModuleName.setText(module.getTitle());
-                displayTopic(course.getId(), module.getId());
+                 displayTopic(course.getId(), module.getId());
                 displayQuiz(course.getId(), module.getId());
             }
         }
@@ -122,6 +142,7 @@ public class ViewModuleActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                topicList.clear();
                 try {
                     for(DataSnapshot topicSnapshot : snapshot.child("Topic").getChildren()){
                         String topicID = topicSnapshot.getKey();
@@ -167,14 +188,15 @@ public class ViewModuleActivity extends AppCompatActivity {
     }
 
     public void displayQuiz(String courseID, String moduleID){
-        quizList.clear();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(courseID).child("Module").child(moduleID);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot quizSnapshot : snapshot.child("Quiz").getChildren()){
+                quizList.clear();
+                for (DataSnapshot quizSnapshot : snapshot.child("Quiz").getChildren()) {
+
                     String quizID = quizSnapshot.getKey();
                     String quizTitle = quizSnapshot.child("quizTitle").getValue(String.class);
 
@@ -186,7 +208,17 @@ public class ViewModuleActivity extends AppCompatActivity {
                     quizList.add(quiz);
 
                     calculateScores(quizID);
+
                 }
+
+
+                if(quizList.isEmpty()){
+                    rlModuleProgress.setVisibility(View.GONE);
+                }
+                else{
+                    rlModuleProgress.setVisibility(View.VISIBLE);
+                }
+
                 quizAdapter.notifyDataSetChanged();
             }
 
@@ -198,8 +230,11 @@ public class ViewModuleActivity extends AppCompatActivity {
 
     }
 
+
+
     public void calculateScores(String quizID){
         scoreList.clear();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(course.getId()).child("Module").child(module.getId()).child("Quiz").child(quizID);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -220,9 +255,30 @@ public class ViewModuleActivity extends AppCompatActivity {
 
                         quizAdapter.notifyDataSetChanged();
 
-                        Toast.makeText(ViewModuleActivity.this, "Score: " + score, Toast.LENGTH_SHORT).show();
+                        // Calculate individual percentage
+                        float individualPercentage = (Float.parseFloat(score) / Float.parseFloat(totalScore)) * 100;
+
+                        // Add the individual percentage to the list or array
+                        // Assuming you have a list or array to store individual percentages
+                        individualPercentageList.add(individualPercentage);
+
+                        // Calculate the average percentage in a loop
+                        float totalPercentage = 0;
+                        for (float percentage : individualPercentageList) {
+                            totalPercentage += percentage;
+                        }
+                        float averagePercentage = totalPercentage / individualPercentageList.size();
+
+                        // Update UI with average percentage
+                        tvPercent.setText(averagePercentage + "%");
+
+                        // If you want to update a progress bar, update it based on the average percentage
+                        quizProgress.setProgress((int) averagePercentage);
+
+
                     }
                 }
+                quizAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -230,5 +286,6 @@ public class ViewModuleActivity extends AppCompatActivity {
 
             }
         });
+
     }
 }

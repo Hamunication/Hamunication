@@ -3,12 +3,18 @@ package com.dx3evm.hamunication.Models;
 import java.io.Serializable;
 
 public class Course implements Serializable {
-    private String id, title, img, description;
+    private String id;
+    private String title;
+    private String img;
+    private String description;
+    private String progress;
 
     public Course() {}
-    public Course(String Title, String img, String description) {
+    public Course(String Title, String img, String description, String progress) {
         this.title = Title;
         this.description = description;
+        this.img = img;
+        this.progress = progress;
     }
 
     public String getId() {
@@ -42,4 +48,13 @@ public class Course implements Serializable {
     public void setImg(String img) {
         this.img = img;
     }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
 }

@@ -16,6 +16,18 @@
         android:theme="@style/Theme.Hamunication"
         tools:targetApi="31">
         <activity
+            android:name=".AddQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewNewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllNewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateNewsActivity"
+            android:exported="false" />
+        <activity
             android:name=".QuizResultActivity"
             android:exported="false" />
         <activity

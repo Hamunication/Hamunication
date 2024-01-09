@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dx3evm.hamunication.Models.Module;
+import com.dx3evm.hamunication.Models.Topic;
 import com.dx3evm.hamunication.R;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleViewHolder>{
     List<Module> moduleList;
 
     private OnClickListener onClickListener;
+    private OnLongClickListener onLongClickListener;
 
     public ModuleAdapter(Context context, List<Module>  moduleList){
         this.context = context;
@@ -46,6 +48,16 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleViewHolder>{
               }
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(onLongClickListener != null){
+                    onLongClickListener.onLongClick(holder.getAdapterPosition(), module);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -59,6 +71,14 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleViewHolder>{
 
     public interface OnClickListener {
         void onClick(int position, Module module);
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(int position, Module module);
     }
 
 }

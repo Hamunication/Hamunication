@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.dx3evm.hamunication.Adapters.CourseAdapter;
 import com.dx3evm.hamunication.CreateCourseActivity;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.R;
 import com.dx3evm.hamunication.ViewCourseActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -102,43 +104,116 @@ public class CourseFragment extends Fragment {
 
         return fragmentView;
     }
-    public void displayCourses(){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                courseList.clear();
-                try {
-                    for(DataSnapshot courseSnapshot : snapshot.getChildren()){
-                        String courseId = courseSnapshot.getKey();
-                        String courseTitle = courseSnapshot.child("Title").getValue(String.class);
-                        String courseDesc = courseSnapshot.child("Description").getValue(String.class);
-                        String courseImg = courseSnapshot.child("Image").getValue(String.class);
 
-                        Course course = new Course();
-                        course.setId(courseId);
-                        course.setTitle(courseTitle);
-                        course.setDescription(courseDesc);
-                        course.setImg(courseImg);
+    public void displayCourses() {
 
-                        courseList.add(course);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null){
+            String UID = firebaseAuth.getCurrentUser().getUid();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    courseList.clear();
+                    try {
+                        for (DataSnapshot courseSnapshot : snapshot.getChildren()) {
+
+                            int totalScore = 0;
+                            int myScore = 0;
+                            String courseId = courseSnapshot.getKey();
+                            String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+                            String courseDesc = courseSnapshot.child("Description").getValue(String.class);
+                            String courseImg = courseSnapshot.child("Image").getValue(String.class);
+
+                            Course course = new Course();
+                            course.setId(courseId);
+                            course.setTitle(courseTitle);
+                            course.setDescription(courseDesc);
+                            course.setImg(courseImg);
+
+                            if (courseSnapshot.hasChild("Module")) {
+                                for (DataSnapshot moduleSnapshot : courseSnapshot.child("Module").getChildren()) {
+                                    if (moduleSnapshot.hasChild("Quiz")) {
+                                        for (DataSnapshot quizSnapshot : moduleSnapshot.child("Quiz").getChildren()) {
+                                            // Assuming each child under "Quiz" is a quiz
+                                            if (quizSnapshot.hasChild("usersScore")) {
+                                                if (quizSnapshot.hasChild("usersScore")) {
+                                                    DataSnapshot userScoreSnapshot = quizSnapshot.child("usersScore").child(UID);
+
+                                                    if (userScoreSnapshot.hasChild("TotalScore") && userScoreSnapshot.child("TotalScore").getValue() != null) {
+                                                        totalScore += Integer.parseInt(userScoreSnapshot.child("TotalScore").getValue(String.class));
+                                                        myScore += Integer.parseInt(userScoreSnapshot.child("Score").getValue(String.class));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            float totalPercentage = 0.0f;
+                            if(myScore > 0){
+                                totalPercentage = ((float)myScore / (float)totalScore) * 100;
+                            }else{
+                                totalPercentage = 0.0f;
+                            }
+                            course.setProgress(String.valueOf(Math.round(totalPercentage)));
+                            courseList.add(course);
+                        }
+                        courseAdapter.notifyDataSetChanged();
+                    } catch (Exception ex) {
+                        // Handle exceptions
                     }
-                    courseAdapter.notifyDataSetChanged();
-
-                } catch (Exception ex) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("")
-                            .setMessage(ex.getMessage())
-                            .setPositiveButton("Ok", null).show();
                 }
 
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle onCancelled
+                }
+            });
 
-            }
-        });
+        }
     }
+
+//    Old Code 1
+//    public void displayCourses(){
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                courseList.clear();
+//                try {
+//                    for(DataSnapshot courseSnapshot : snapshot.getChildren()){
+//                        String courseId = courseSnapshot.getKey();
+//                        String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+//                        String courseDesc = courseSnapshot.child("Description").getValue(String.class);
+//                        String courseImg = courseSnapshot.child("Image").getValue(String.class);
+//
+//                        Course course = new Course();
+//                        course.setId(courseId);
+//                        course.setTitle(courseTitle);
+//                        course.setDescription(courseDesc);
+//                        course.setImg(courseImg);
+//
+//                        courseList.add(course);
+//                    }
+//                    courseAdapter.notifyDataSetChanged();
+//
+//                } catch (Exception ex) {
+//                    new AlertDialog.Builder(getContext())
+//                            .setTitle("")
+//                            .setMessage(ex.getMessage())
+//                            .setPositiveButton("Ok", null).show();
+//                }
+//
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+
 
 
 //    Old Code

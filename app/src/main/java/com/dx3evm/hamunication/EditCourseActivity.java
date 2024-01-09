@@ -1,10 +1,12 @@
 package com.dx3evm.hamunication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,6 +59,27 @@ public class EditCourseActivity extends AppCompatActivity {
                 intent.putExtra("module", module);
 
                 startActivity(intent);
+            }
+        });
+
+        moduleAdapter.setOnLongClickListener(new ModuleAdapter.OnLongClickListener() {
+            @Override
+            public void onLongClick(int position, Module module) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditCourseActivity.this);
+                builder.setTitle("Delete Module")
+                        .setMessage("Are you sure you want to delete?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteModule(module.getId());
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User clicked the Cancel button, do nothing or handle accordingly
+                            }
+                        }).show();
             }
         });
 
@@ -125,6 +148,7 @@ public class EditCourseActivity extends AppCompatActivity {
                 }catch(Exception ex){
 
                 }
+
             }
 
             @Override
@@ -146,6 +170,22 @@ public class EditCourseActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(EditCourseActivity.this, "Error adding module!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void deleteModule(String moduleId) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses").child(course.getId()).child("Module").child(moduleId);
+
+        databaseReference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(EditCourseActivity.this, "Module deleted Successfully!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditCourseActivity.this, "Error deleting Module!", Toast.LENGTH_SHORT).show();
             }
         });
     }

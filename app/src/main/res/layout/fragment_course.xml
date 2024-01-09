@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.CourseFragment">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarAccount"
         android:layout_width="match_parent"
         android:layout_height="60dp">
+
         <TextView
             android:id="@+id/tvProfile"
             android:layout_width="wrap_content"
@@ -18,22 +20,13 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"/>
-
     </androidx.appcompat.widget.Toolbar>
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCourseList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarAccount">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCourseList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:nestedScrollingEnabled="false" />
-        </LinearLayout>
-    </ScrollView>
+        android:layout_below="@+id/toolbarAccount"
+        android:padding="10dp"
+        android:nestedScrollingEnabled="false" />
 </RelativeLayout>

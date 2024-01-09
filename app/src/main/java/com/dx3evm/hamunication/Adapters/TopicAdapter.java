@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Topic;
 import com.dx3evm.hamunication.R;
 
@@ -18,6 +19,8 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicViewHolder>{
     Context context;
 
     List<Topic> topicList;
+
+    private OnLongClickListener onLongClickListener;
 
     private OnClickListener onClickListener;
 
@@ -45,6 +48,16 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicViewHolder>{
                 }
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(onLongClickListener != null){
+                    onLongClickListener.onLongClick(holder.getAdapterPosition(), topic);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -58,6 +71,14 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicViewHolder>{
 
     public interface OnClickListener {
         void onClick(int position, Topic topic);
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(int position, Topic topic);
     }
 }
 

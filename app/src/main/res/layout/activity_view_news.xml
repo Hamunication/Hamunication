@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewNewsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/tvCourseName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:expandedTitleGravity="top"
+            app:expandedTitleTextColor="#fff">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/ivNewsImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/img_gilas_china"
+                    android:scaleType="centerCrop"/>
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetEnd="0dp"
+                app:layout_collapseMode="pin">
+                <TextView
+                    android:id="@+id/tvBack"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:text="chevron-left"
+                    android:fontFamily="@font/font_awesome_free_solid"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="#FFF"
+                    android:gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+                <TextView
+                    android:id="@+id/tvNewsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:text="News Title"/>
+
+                <TextView
+                    android:id="@+id/tvNewsEditorAndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="14sp"
+                    android:textColor="#888"
+                    android:text="Fred Villanueva • 2024 Jan 08"/>
+
+                <TextView
+                    android:id="@+id/tvNewsDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:justificationMode="inter_word"
+                    android:lineHeight="25dp"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Posuere morbi leo urna molestie at elementum eu facilisis sed. Pellentesque adipiscing commodo elit at imperdiet dui accumsan sit amet. Nulla pellentesque dignissim enim sit amet venenatis. Sed enim ut sem viverra aliquet. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum odio. Imperdiet dui accumsan sit amet nulla. Morbi quis commodo odio aenean sed adipiscing diam. Lectus nulla at volutpat diam ut venenatis tellus in. Odio aenean sed adipiscing diam. Risus feugiat in ante metus dictum at tempor commodo ullamcorper. Nisl condimentum id venenatis a. Iaculis eu non diam phasellus vestibulum lorem sed. Convallis a cras semper auctor neque vitae tempus. Ipsum faucibus vitae aliquet nec ullamcorper. Ut tristique et egestas quis ipsum suspendisse."
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

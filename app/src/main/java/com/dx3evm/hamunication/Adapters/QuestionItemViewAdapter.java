@@ -13,7 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Question;
+import com.dx3evm.hamunication.Models.QuestionModel;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.R;
 import com.google.android.material.button.MaterialButton;
@@ -26,12 +28,14 @@ import java.util.Map;
 public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemViewAdapter.QuestionItemViewViewHolder> {
 
     Context context;
-    List<Question> questionList;
+    List<QuestionModel> questionList;
     private QuestionItemViewViewHolder questionItemViewViewHolder;
+
+    private OnLongClickListener onLongClickListener;
 
     private Map<String, String> selectedChoicesMap = new HashMap<>();
 
-    public QuestionItemViewAdapter(Context context, List<Question> questionList) {
+    public QuestionItemViewAdapter(Context context, List<QuestionModel> questionList) {
         this.context = context;
         this.questionList = questionList;
     }
@@ -46,8 +50,8 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
 
     @Override
     public void onBindViewHolder(@NonNull QuestionItemViewViewHolder holder, int position) {
-        Question currentQuestion = questionList.get(position);
-        holder.tvQuestion.setText(currentQuestion.getQuestionText());
+        QuestionModel currentQuestion = questionList.get(position);
+        holder.tvQuestion.setText(currentQuestion.getQuestionTitle());
 
         holder.radioGroup.removeAllViews();
 
@@ -75,20 +79,41 @@ public class QuestionItemViewAdapter extends RecyclerView.Adapter<QuestionItemVi
                 holder.tvError.setVisibility(View.GONE);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(onLongClickListener != null){
+                    onLongClickListener.onLongClick(position, currentQuestion);
+                }
+                return true;
+            }
+        });
+
     }
+
 
     @Override
     public int getItemCount() {
         return questionList.size();
     }
 
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(int position, QuestionModel questionModel);
+    }
+
     public void checkBlankChoices(){
-        for(Question question : questionList){
+        for(QuestionModel question : questionList){
             if(!question.isAnswered()){
                 questionItemViewViewHolder.tvError.setVisibility(View.VISIBLE);
             }
         }
     }
+
 
     public Map<String, String> getSelectedChoicesMap() {
         return selectedChoicesMap;

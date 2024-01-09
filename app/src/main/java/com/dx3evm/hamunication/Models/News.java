@@ -1,6 +1,8 @@
 package com.dx3evm.hamunication.Models;
 
-public class News {
+import java.io.Serializable;
+
+public class News implements Serializable {
 
     private String newsId;
     private String newsImage;

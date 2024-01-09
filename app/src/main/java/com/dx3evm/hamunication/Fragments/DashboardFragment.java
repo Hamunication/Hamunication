@@ -1,5 +1,6 @@
 package com.dx3evm.hamunication.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,14 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dx3evm.hamunication.Adapters.CourseAdapter;
 import com.dx3evm.hamunication.Adapters.NewsAdapter;
+import com.dx3evm.hamunication.AllNewsActivity;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.News;
 import com.dx3evm.hamunication.R;
+import com.dx3evm.hamunication.ViewCourseActivity;
+import com.dx3evm.hamunication.ViewNewsActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,9 +41,14 @@ import java.util.List;
  */
 public class DashboardFragment extends Fragment {
 
-    List<News> newsList;
-    List<Course> courseItems;
+    public static final String NEXT_SCREEN = "details_screen";
+    FirebaseDatabase firebaseDatabase;
 
+    FirebaseAuth fAuth;
+    List<News> newsList;
+    List<Course> courseList;
+
+    TextView tvUserName, tvNewsSeeAll;
     RecyclerView rvNews, rvCourses;
 
     NewsAdapter newsAdapter;
@@ -51,18 +62,8 @@ public class DashboardFragment extends Fragment {
     private String mParam2;
 
     public DashboardFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static DashboardFragment newInstance(String param1, String param2) {
         DashboardFragment fragment = new DashboardFragment();
         Bundle args = new Bundle();
@@ -86,19 +87,38 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+
         newsList = new ArrayList<>();
-        courseItems = new ArrayList<>();
+        courseList = new ArrayList<>();
+
         displayNews();
-//        newsItems.add(new News(R.drawable.img_news_ph_gold, "Asian Games medalists from the Philippines", "Fred Villanueva", "1 hour ago"));
-//        newsItems.add(new News(R.drawable.img_news_cyclone, "Signal No. 3: Tropical Cyclone Jenny will hit some area of the Philippines", "Fred Villanueva", "1 hour ago"));
-//        newsItems.add(new News(R.drawable.img_news_ph_ayungin, "PCG to China Coast Guard, militia: Stop ‘illegal’ acts within PH waters", "Fred Villanueva", "1 hour ago"));
+        displayCourses();
+
         newsAdapter = new NewsAdapter(newsList);
 
-//         courseItems.add(new Course(R.drawable.img_gilas_china, "Class A", "Fred Villanueva", 45, "45% complete"));
-//         courseItems.add(new Course(R.drawable.img_news_cyclone, "Class B", "Fred Villanueva", 0, "0% complete"));
-//         courseItems.add(new Course(R.drawable.img_news_ph_gold, "Class C", "Fred Villanueva", 0, "0% complete"));
-//         courseItems.add(new Course(R.drawable.img_news_cyclone, "Class D", "Fred Villanueva", 0, "0% complete"));
-//         courseAdapter = new CourseAdapter(courseItems);
+        newsAdapter.setOnClickListener(new NewsAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position, News news) {
+                Intent intent = new Intent(getActivity(), ViewNewsActivity.class);
+                intent.putExtra(NEXT_SCREEN, news);
+                startActivity(intent);
+            }
+        });
+
+        courseAdapter = new CourseAdapter(getContext().getApplicationContext(), courseList);
+
+        courseAdapter.setOnClickListener(new CourseAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position, Course course) {
+                Intent intent = new Intent(getActivity(), ViewCourseActivity.class);
+
+                intent.putExtra(NEXT_SCREEN, course);
+                startActivity(intent);
+            }
+        });
 
         rvNews = fragmentView.findViewById(R.id.rvNews);
         rvCourses = fragmentView.findViewById(R.id.rvCourses);
@@ -106,8 +126,20 @@ public class DashboardFragment extends Fragment {
         rvNews.setLayoutManager(new LinearLayoutManager(fragmentView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvNews.setAdapter(newsAdapter);
 
-//         rvCourses.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
-//         rvCourses.setAdapter(courseAdapter);
+        rvCourses.setLayoutManager(new LinearLayoutManager(fragmentView.getContext()));
+        rvCourses.setAdapter(courseAdapter);
+
+        tvUserName = fragmentView.findViewById(R.id.tvUserName);
+
+        tvNewsSeeAll = fragmentView.findViewById(R.id.tvNewsSeeAll);
+        tvNewsSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(fragmentView.getContext(), AllNewsActivity.class));
+            }
+        });
+
+        getUserDetails();
 
         return fragmentView;
     }
@@ -123,6 +155,7 @@ public class DashboardFragment extends Fragment {
                         String newsId = newsSnapshot.getKey();
                         String newsImage = newsSnapshot.child("newsImage").getValue(String.class);
                         String newsTitle = newsSnapshot.child("newsTitle").getValue(String.class);
+                        String newsDescription = newsSnapshot.child("newsDescription").getValue(String.class);
                         String newsEditor = newsSnapshot.child("newsEditor").getValue(String.class);
                         String newsTime = newsSnapshot.child("newsTime").getValue(String.class);
 
@@ -130,6 +163,7 @@ public class DashboardFragment extends Fragment {
                         news.setNewsId(newsId);
                         news.setNewsImage(newsImage);
                         news.setNewsTitle(newsTitle);
+                        news.setNewsDescription(newsDescription);
                         news.setNewsEditor(newsEditor);
                         news.setNewsTime(newsTime);
 
@@ -147,5 +181,97 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+    }
+
+    public void displayCourses() {
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null){
+            String UID = firebaseAuth.getCurrentUser().getUid();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Courses");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    courseList.clear();
+                    try {
+                        for (DataSnapshot courseSnapshot : snapshot.getChildren()) {
+
+                            int totalScore = 0;
+                            int myScore = 0;
+                            String courseId = courseSnapshot.getKey();
+                            String courseTitle = courseSnapshot.child("Title").getValue(String.class);
+                            String courseDesc = courseSnapshot.child("Description").getValue(String.class);
+                            String courseImg = courseSnapshot.child("Image").getValue(String.class);
+
+                            Course course = new Course();
+                            course.setId(courseId);
+                            course.setTitle(courseTitle);
+                            course.setDescription(courseDesc);
+                            course.setImg(courseImg);
+
+                            if (courseSnapshot.hasChild("Module")) {
+                                for (DataSnapshot moduleSnapshot : courseSnapshot.child("Module").getChildren()) {
+                                    if (moduleSnapshot.hasChild("Quiz")) {
+                                        for (DataSnapshot quizSnapshot : moduleSnapshot.child("Quiz").getChildren()) {
+                                            // Assuming each child under "Quiz" is a quiz
+                                            if (quizSnapshot.hasChild("usersScore")) {
+                                                if (quizSnapshot.hasChild("usersScore")) {
+                                                    DataSnapshot userScoreSnapshot = quizSnapshot.child("usersScore").child(UID);
+
+                                                    if (userScoreSnapshot.hasChild("TotalScore") && userScoreSnapshot.child("TotalScore").getValue() != null) {
+                                                        totalScore += Integer.parseInt(userScoreSnapshot.child("TotalScore").getValue(String.class));
+                                                        myScore += Integer.parseInt(userScoreSnapshot.child("Score").getValue(String.class));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            float totalPercentage = 0.0f;
+                            if (totalScore == 0.0f || totalScore > 0 && myScore != totalScore) {
+                                totalPercentage = ((float) myScore / (float) totalScore) * 100;
+                                course.setProgress(String.valueOf(Math.round(totalPercentage)));
+                                courseList.add(course);
+                            } else {
+                                totalPercentage = 0.0f;
+                            }
+                        }
+                        courseAdapter.notifyDataSetChanged();
+                    } catch (Exception ex) {
+                        // Handle exceptions
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle onCancelled
+                }
+            });
+
+        }
+    }
+
+    public void getUserDetails() {
+        if(fAuth.getCurrentUser() != null){
+            DatabaseReference databaseReference = firebaseDatabase.getReference("Users").child(fAuth.getCurrentUser().getUid());
+
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String fullName = snapshot.child("FullName").getValue(String.class);
+
+                        tvUserName.setText("Hello, " + fullName + "!");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
 }

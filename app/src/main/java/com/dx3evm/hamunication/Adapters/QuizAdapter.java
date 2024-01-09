@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.Models.Score;
 import com.dx3evm.hamunication.R;
@@ -26,11 +27,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
 
     private OnClickListener onClickListener;
 
+    private OnLongClickListener onLongClickListener;
+
     public QuizAdapter(Context context, List<Quiz> quizList, List<Score> scoreList) {
         this.context = context;
         this.quizList = quizList;
         this.scoreList = scoreList;
     }
+
 
     @NonNull
     @Override
@@ -45,17 +49,21 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
         Quiz quiz = quizList.get(position);
         holder.tvQuizTitle.setText(quiz.getQuizTitle());
 
-        if (!scoreList.isEmpty() && position < scoreList.size()) {
-            holder.tvPercentage.setVisibility(View.VISIBLE);
-            holder.tvTakeQuiz.setVisibility(View.GONE);
-            Score score = scoreList.get(position);
-            holder.tvPercentage.setText(score.getScore() + "/" + score.getTotalScore());
-        } else {
+        if(scoreList != null){
+            if (!scoreList.isEmpty() && position < scoreList.size()) {
+                holder.tvPercentage.setVisibility(View.VISIBLE);
+                holder.tvTakeQuiz.setVisibility(View.GONE);
+                Score score = scoreList.get(position);
+                holder.tvPercentage.setText(score.getScore() + "/" + score.getTotalScore());
+            } else {
+                holder.tvTakeQuiz.setVisibility(View.VISIBLE);
+                holder.tvPercentage.setVisibility(View.GONE);
+            }
+        }else{
             holder.tvTakeQuiz.setVisibility(View.VISIBLE);
             holder.tvPercentage.setVisibility(View.GONE);
         }
 
-        Toast.makeText(context, "Size: " + scoreList.size(), Toast.LENGTH_SHORT).show();
 
         holder.tvQuizTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +73,18 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
                 }
             }
         });
+
+        holder.tvQuizTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(onLongClickListener != null){
+                    onLongClickListener.onLongClick(holder.getAdapterPosition(), quiz);
+                }
+                return true;
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -79,6 +98,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
     public interface OnClickListener {
         void onClick(int position, Quiz quiz);
 
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(int position, Quiz quiz);
     }
 
     public class QuizViewHolder extends RecyclerView.ViewHolder{

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dx3evm.hamunication.Dialogs.InputDialog;
+import com.dx3evm.hamunication.Models.Question;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.R;
 import com.google.android.material.button.MaterialButton;
@@ -21,13 +22,13 @@ import java.util.List;
 
 public class QuestionItemEditAdapter extends RecyclerView.Adapter<QuestionItemEditAdapter.QuestionItemEditViewHolder> {
 
-    List<Quiz> quizList;
+    List<Question> questionList;
 
     private Activity activity;
 
-    public QuestionItemEditAdapter(Activity activity, List<Quiz> quizList) {
+    public QuestionItemEditAdapter(Activity activity, List<Question> questionList) {
         this.activity = activity;
-        this.quizList = quizList;
+        this.questionList = questionList;
     }
 
     @NonNull
@@ -45,7 +46,7 @@ public class QuestionItemEditAdapter extends RecyclerView.Adapter<QuestionItemEd
 
     @Override
     public int getItemCount() {
-        return quizList.size();
+        return questionList.size();
     }
 
     public class QuestionItemEditViewHolder extends RecyclerView.ViewHolder {

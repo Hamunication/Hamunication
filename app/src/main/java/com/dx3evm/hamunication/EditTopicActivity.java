@@ -83,12 +83,11 @@ public class EditTopicActivity extends AppCompatActivity {
 
         if (topic != null) {
             etTopicName.setText(topic.getTopicTitle());
+            etTopicDescription.setText(topic.getTopicDescription());
+            etTopicDescription.setHeight(500);
 
             for (Map.Entry<String, Map<String, String>> list : topic.getUrlList().entrySet()) {
                 Map<String, String> mediaValues = list.getValue();
-
-                etTopicDescription.setText(topic.getTopicDescription());
-                etTopicDescription.setHeight(500);
 
                 String mediaLink = mediaValues.get("link");
                 String mediaType = mediaValues.get("type");
@@ -200,6 +199,14 @@ public class EditTopicActivity extends AppCompatActivity {
                             Toast.makeText(EditTopicActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
+                    else {
+                        Toast.makeText(EditTopicActivity.this, "no image...", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                if (linkList.isEmpty()) {
+                    createTopic(etTopicName.getText().toString(), etTopicDescription.getText().toString(), linkList);
+                    enableInteractions();
                 }
             }
         });
