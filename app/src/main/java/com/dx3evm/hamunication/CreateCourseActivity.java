@@ -41,12 +41,10 @@ public class CreateCourseActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseDatabase firebaseDatabase;
 
-    boolean isAdmin = false;
     InputDialog inputDialog;
     CourseAdapter courseAdapter;
     List<Course> courseList;
     MaterialButton mtrlBtnAddCourse;
-    MaterialButton imgBtnLogout;
     RecyclerView rvCourseList;
     public static final String NEXT_SCREEN = "details_screen";
 
@@ -59,7 +57,6 @@ public class CreateCourseActivity extends AppCompatActivity {
 
         rvCourseList = findViewById(R.id.rvCourseList);
         mtrlBtnAddCourse = findViewById(R.id.mtrlBtnAddCourse);
-        imgBtnLogout = findViewById(R.id.imgBtnLogout);
 
         courseList = new ArrayList<>();
         courseAdapter = new CourseAdapter(this, courseList);
@@ -125,13 +122,6 @@ public class CreateCourseActivity extends AppCompatActivity {
             }
         });
 
-        imgBtnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(CreateCourseActivity.this, LoginActivity.class));
-            }
-        });
 
     }
 

@@ -24,19 +24,6 @@
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:gravity="center|start"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/imgBtnLogout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@android:color/transparent"
-                android:layout_weight="1"
-                android:text="arrow-right-from-bracket"
-                android:textSize="18sp"
-                android:background="@null"
-                android:fontFamily="@font/font_awesome_free_solid"
-                android:textColor="@color/material_dynamic_primary0"
-                app:cornerRadius="4dp"
-                app:rippleColor="@color/colorPrimaryLight" />
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -62,11 +49,12 @@
                 android:background="@drawable/flat_button"
                 android:textSize="18sp" />
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCourseList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/llBtnContainer"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCourseList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llBtnContainer"/>
 
 
 </RelativeLayout>

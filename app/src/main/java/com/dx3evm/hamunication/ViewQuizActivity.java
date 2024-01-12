@@ -20,6 +20,7 @@ import com.dx3evm.hamunication.Models.Question;
 import com.dx3evm.hamunication.Models.QuestionModel;
 import com.dx3evm.hamunication.Models.Quiz;
 import com.dx3evm.hamunication.Models.Topic;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -197,6 +198,7 @@ public class ViewQuizActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         currentUserFullName = snapshot.child("FullName").getValue(String.class);
+                        markAsComplete(quiz.getQuizID());
                     }
                 }
 
@@ -206,5 +208,16 @@ public class ViewQuizActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void markAsComplete(String quizId){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Courses").child(course.getId()).child("Module").child(module.getId()).child("Quiz").child(quizId);
+
+        databaseReference.child("CompletedUsers").child(fAuth.getCurrentUser().getUid()).setValue(currentUserFullName).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        });
     }
 }

@@ -230,8 +230,6 @@ public class ViewModuleActivity extends AppCompatActivity {
 
     }
 
-
-
     public void calculateScores(String quizID){
         scoreList.clear();
 
@@ -270,10 +268,10 @@ public class ViewModuleActivity extends AppCompatActivity {
                         float averagePercentage = totalPercentage / individualPercentageList.size();
 
                         // Update UI with average percentage
-                        tvPercent.setText(averagePercentage + "%");
+                        tvPercent.setText(Math.round(averagePercentage) + "%");
 
                         // If you want to update a progress bar, update it based on the average percentage
-                        quizProgress.setProgress((int) averagePercentage);
+                        quizProgress.setProgress(Math.round(averagePercentage));
 
 
                     }

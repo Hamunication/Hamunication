@@ -20,18 +20,24 @@
                 android:id="@+id/dashboardBanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
+                android:padding="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvGreetings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Hello,"/>
                 <TextView
                     android:id="@+id/tvUserName"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Hello User!"
+                    android:text="User!"
                     android:textColor="#444"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:padding="15dp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:gravity="start"/>
 
             </LinearLayout>

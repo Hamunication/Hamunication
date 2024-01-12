@@ -1,5 +1,6 @@
 package com.dx3evm.hamunication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,12 +20,21 @@ import com.bumptech.glide.Glide;
 import com.dx3evm.hamunication.Models.Course;
 import com.dx3evm.hamunication.Models.Module;
 import com.dx3evm.hamunication.Models.Topic;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
 public class ViewTopicActivity extends AppCompatActivity {
 
+    String currentUserFullName = "";
+    FirebaseAuth firebaseAuth;
     RelativeLayout mediaFrameLayout;
     TextView tvBack, tvTopicName, tvTopicDescription;
     Course course = null;
@@ -35,6 +45,10 @@ public class ViewTopicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_topic);
+        
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        getUserDetails();
 
         mediaFrameLayout = findViewById(R.id.mediaFrameLayout);
         tvTopicName = findViewById(R.id.tvTopicName);
@@ -51,6 +65,8 @@ public class ViewTopicActivity extends AppCompatActivity {
         course = (Course) getIntent().getSerializableExtra("course");
         module = (Module) getIntent().getSerializableExtra("module");
         topic = (Topic) getIntent().getSerializableExtra("topic");
+
+
 
         if (topic != null) {
             tvTopicName.setText(topic.getTopicTitle());
@@ -134,5 +150,69 @@ public class ViewTopicActivity extends AppCompatActivity {
         });
 
     }
+
+    public void markAsComplete(String topicId){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Courses").child(course.getId()).child("Module").child(module.getId()).child("Topic").child(topicId);
+        
+        databaseReference.child("CompletedUsers").child(firebaseAuth.getCurrentUser().getUid()).setValue(currentUserFullName).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        });
+    }
+
+    public void getUserDetails(){
+        if(firebaseAuth.getCurrentUser() != null){
+            String currentUser = firebaseAuth.getCurrentUser().getUid();
+
+            DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+            usersReference.child(currentUser).child("FullName").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    currentUserFullName = snapshot.getValue(String.class);
+                    markAsComplete(topic.getTopicID());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
+
+    private void checkIfCompleted(String userId) {
+        DatabaseReference completedUsersReference = FirebaseDatabase.getInstance().getReference()
+                .child("Courses").child(course.getId()).child("Module").child(module.getId())
+                .child("Topic").child(topic.getTopicID()).child("CompletedUsers");
+
+        completedUsersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot userSnapshot : snapshot.getChildren()){
+                        String id = userSnapshot.getKey();
+                        
+                        if(id.equals(userId)){
+                            Toast.makeText(ViewTopicActivity.this, "Topic Completed", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(ViewTopicActivity.this, "Topic not completed!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+               
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error if needed
+            }
+        });
+    }
+
 
 }

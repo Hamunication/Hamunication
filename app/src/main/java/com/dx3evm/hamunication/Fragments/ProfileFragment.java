@@ -124,7 +124,6 @@ public class ProfileFragment extends Fragment {
             fAuth.signOut();
             startActivity(new Intent(view.getContext().getApplicationContext(), LoginActivity.class));
             getActivity().finish();
-            Toast.makeText(getActivity().getApplicationContext(), "Click", Toast.LENGTH_SHORT).show();
         });
 
         return fragmentView;

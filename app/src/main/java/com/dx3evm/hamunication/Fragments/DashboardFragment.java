@@ -196,8 +196,10 @@ public class DashboardFragment extends Fragment {
                     try {
                         for (DataSnapshot courseSnapshot : snapshot.getChildren()) {
 
-                            int totalScore = 0;
-                            int myScore = 0;
+                            float totalTopics = 0.0f;
+                            float totalQuiz = 0.0f;
+                            float topicCompleted = 0.0f;
+                            float quizCompleted = 0.0f;
                             String courseId = courseSnapshot.getKey();
                             String courseTitle = courseSnapshot.child("Title").getValue(String.class);
                             String courseDesc = courseSnapshot.child("Description").getValue(String.class);
@@ -211,16 +213,31 @@ public class DashboardFragment extends Fragment {
 
                             if (courseSnapshot.hasChild("Module")) {
                                 for (DataSnapshot moduleSnapshot : courseSnapshot.child("Module").getChildren()) {
-                                    if (moduleSnapshot.hasChild("Quiz")) {
-                                        for (DataSnapshot quizSnapshot : moduleSnapshot.child("Quiz").getChildren()) {
-                                            // Assuming each child under "Quiz" is a quiz
-                                            if (quizSnapshot.hasChild("usersScore")) {
-                                                if (quizSnapshot.hasChild("usersScore")) {
-                                                    DataSnapshot userScoreSnapshot = quizSnapshot.child("usersScore").child(UID);
+                                    if (moduleSnapshot.hasChild("Topic")) {
+                                        totalTopics += moduleSnapshot.child("Topic").getChildrenCount();
+                                        for (DataSnapshot topicSnapshot : moduleSnapshot.child("Topic").getChildren()) {
+                                            if (topicSnapshot.hasChild("CompletedUsers")) {
 
-                                                    if (userScoreSnapshot.hasChild("TotalScore") && userScoreSnapshot.child("TotalScore").getValue() != null) {
-                                                        totalScore += Integer.parseInt(userScoreSnapshot.child("TotalScore").getValue(String.class));
-                                                        myScore += Integer.parseInt(userScoreSnapshot.child("Score").getValue(String.class));
+                                                for (DataSnapshot userSnapshot : topicSnapshot.child("CompletedUsers").getChildren()) {
+                                                    String userId = userSnapshot.getKey();
+
+                                                    if (userId != null && userId.equals(firebaseAuth.getCurrentUser().getUid())) {
+                                                        topicCompleted++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if(moduleSnapshot.hasChild("Quiz")){
+                                        totalQuiz += moduleSnapshot.child("Quiz").getChildrenCount();
+                                        for(DataSnapshot quizSnapshot : moduleSnapshot.child("Quiz").getChildren()){
+                                            if (quizSnapshot.hasChild("CompletedUsers")) {
+
+                                                for (DataSnapshot userSnapshot : quizSnapshot.child("CompletedUsers").getChildren()) {
+                                                    String userId = userSnapshot.getKey();
+
+                                                    if (userId != null && userId.equals(firebaseAuth.getCurrentUser().getUid())) {
+                                                        quizCompleted++;
                                                     }
                                                 }
                                             }
@@ -230,13 +247,14 @@ public class DashboardFragment extends Fragment {
                             }
 
                             float totalPercentage = 0.0f;
-                            if (totalScore == 0.0f || totalScore > 0 && myScore != totalScore) {
-                                totalPercentage = ((float) myScore / (float) totalScore) * 100;
-                                course.setProgress(String.valueOf(Math.round(totalPercentage)));
-                                courseList.add(course);
-                            } else {
+                            if(topicCompleted > 0){
+                                totalPercentage = ((topicCompleted + quizCompleted) / (totalTopics + totalQuiz)) * 100;
+                            }else{
                                 totalPercentage = 0.0f;
                             }
+
+                            course.setProgress(String.valueOf(Math.round(totalPercentage)));
+                            courseList.add(course);
                         }
                         courseAdapter.notifyDataSetChanged();
                     } catch (Exception ex) {
@@ -263,7 +281,7 @@ public class DashboardFragment extends Fragment {
                     if (snapshot.exists()) {
                         String fullName = snapshot.child("FullName").getValue(String.class);
 
-                        tvUserName.setText("Hello, " + fullName + "!");
+                        tvUserName.setText(fullName + "!");
                     }
                 }
 

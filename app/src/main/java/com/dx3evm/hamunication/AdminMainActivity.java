@@ -93,6 +93,9 @@ public class AdminMainActivity extends AppCompatActivity {
                 else if(adminMenu.getTitle().equals("News")){
                     startActivity(new Intent(AdminMainActivity.this, CreateNewsActivity.class));
                 }
+                else if(adminMenu.getTitle().equals("Accounts")){
+                    startActivity(new Intent(AdminMainActivity.this, AccountsActivity.class));
+                }
                 else{
 
                 }
